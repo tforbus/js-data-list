@@ -1,4 +1,6 @@
 import { isString } from '../utils/string.js';
+import { isArray } from '../utils/array.js';
+import length from './length.js';
 
 /**
  * Return the last element of a list.
@@ -8,15 +10,17 @@ import { isString } from '../utils/string.js';
  * last('Foo') === 'o'
  */
 export default function last(xs) {
-    if (xs.length === 0) {
+    let len = length(xs);
+
+    if (!len) {
         return xs;
     }
 
-    if (Array.isArray(xs)) {
-        return xs[xs.length - 1];
+    if (isArray(xs)) {
+        return xs[len - 1];
     }
 
     if (isString(xs)) {
-        return xs.charAt(xs.length - 1);
+        return xs.charAt(len - 1);
     }
 }

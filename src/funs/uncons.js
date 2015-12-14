@@ -1,6 +1,7 @@
 import { isString } from '../utils/string.js';
 import head from './head.js';
 import tail from './tail.js';
+import length from './length.js';
 
 /**
  * Decompose list into head and tail.
@@ -10,7 +11,7 @@ import tail from './tail.js';
  * uncons('Hello') == {fst: 'H', snd: 'ello'}
  */
 export default function uncons(xs) {
-    if (xs.length === 0) {
+    if (!length(xs)) {
         return xs;
     }
 

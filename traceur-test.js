@@ -9,6 +9,16 @@ System.registerModule("src/funs/concat.js", [], function() {
       return $__default;
     }};
 });
+System.registerModule("src/utils/array.js", [], function() {
+  "use strict";
+  var __moduleName = "src/utils/array.js";
+  function isArray(xs) {
+    return Array.isArray(xs);
+  }
+  return {get isArray() {
+      return isArray;
+    }};
+});
 System.registerModule("src/utils/string.js", [], function() {
   "use strict";
   var __moduleName = "src/utils/string.js";
@@ -33,46 +43,6 @@ System.registerModule("src/utils/string.js", [], function() {
     }
   };
 });
-System.registerModule("src/funs/head.js", [], function() {
-  "use strict";
-  var __moduleName = "src/funs/head.js";
-  var isString = System.get("src/utils/string.js").isString;
-  function head(xs) {
-    if (xs.length === 0) {
-      return xs;
-    }
-    if (Array.isArray(xs)) {
-      return xs[0];
-    }
-    if (isString(xs)) {
-      return xs.charAt(0);
-    }
-  }
-  var $__default = head;
-  return {get default() {
-      return $__default;
-    }};
-});
-System.registerModule("src/funs/init.js", [], function() {
-  "use strict";
-  var __moduleName = "src/funs/init.js";
-  var isString = System.get("src/utils/string.js").isString;
-  function init(xs) {
-    if (xs.length === 0) {
-      return xs;
-    }
-    if (Array.isArray(xs)) {
-      return xs.slice(-1 * xs.length + 1);
-    }
-    if (isString(xs)) {
-      return xs.substring(0, xs.length - 1);
-    }
-  }
-  var $__default = init;
-  return {get default() {
-      return $__default;
-    }};
-});
 System.registerModule("src/funs/isEmpty.js", [], function() {
   "use strict";
   var __moduleName = "src/funs/isEmpty.js";
@@ -80,26 +50,6 @@ System.registerModule("src/funs/isEmpty.js", [], function() {
     return xs && !xs.length;
   }
   var $__default = isEmpty;
-  return {get default() {
-      return $__default;
-    }};
-});
-System.registerModule("src/funs/last.js", [], function() {
-  "use strict";
-  var __moduleName = "src/funs/last.js";
-  var isString = System.get("src/utils/string.js").isString;
-  function last(xs) {
-    if (xs.length === 0) {
-      return xs;
-    }
-    if (Array.isArray(xs)) {
-      return xs[xs.length - 1];
-    }
-    if (isString(xs)) {
-      return xs.charAt(xs.length - 1);
-    }
-  }
-  var $__default = last;
   return {get default() {
       return $__default;
     }};
@@ -119,14 +69,72 @@ System.registerModule("src/funs/length.js", [], function() {
       return $__default;
     }};
 });
-System.registerModule("src/utils/array.js", [], function() {
+System.registerModule("src/funs/head.js", [], function() {
   "use strict";
-  var __moduleName = "src/utils/array.js";
-  function isArray(xs) {
-    return Array.isArray(xs);
+  var __moduleName = "src/funs/head.js";
+  var isString = System.get("src/utils/string.js").isString;
+  var isArray = System.get("src/utils/array.js").isArray;
+  var length = System.get("src/funs/length.js").default;
+  function head(xs) {
+    if (length(xs) === 0) {
+      return xs;
+    }
+    if (isArray(xs)) {
+      return xs[0];
+    }
+    if (isString(xs)) {
+      return xs.charAt(0);
+    }
   }
-  return {get isArray() {
-      return isArray;
+  var $__default = head;
+  return {get default() {
+      return $__default;
+    }};
+});
+System.registerModule("src/funs/init.js", [], function() {
+  "use strict";
+  var __moduleName = "src/funs/init.js";
+  var isString = System.get("src/utils/string.js").isString;
+  var isArray = System.get("src/utils/array.js").isArray;
+  var length = System.get("src/funs/length.js").default;
+  function init(xs) {
+    var len = length(xs);
+    if (!len) {
+      return xs;
+    }
+    if (isArray(xs)) {
+      return xs.slice(-1 * len + 1);
+    }
+    if (isString(xs)) {
+      return xs.substring(0, len - 1);
+    }
+  }
+  var $__default = init;
+  return {get default() {
+      return $__default;
+    }};
+});
+System.registerModule("src/funs/last.js", [], function() {
+  "use strict";
+  var __moduleName = "src/funs/last.js";
+  var isString = System.get("src/utils/string.js").isString;
+  var isArray = System.get("src/utils/array.js").isArray;
+  var length = System.get("src/funs/length.js").default;
+  function last(xs) {
+    var len = length(xs);
+    if (!len) {
+      return xs;
+    }
+    if (isArray(xs)) {
+      return xs[len - 1];
+    }
+    if (isString(xs)) {
+      return xs.charAt(len - 1);
+    }
+  }
+  var $__default = last;
+  return {get default() {
+      return $__default;
     }};
 });
 System.registerModule("src/funs/map.js", [], function() {
@@ -154,15 +162,18 @@ System.registerModule("src/funs/tail.js", [], function() {
   "use strict";
   var __moduleName = "src/funs/tail.js";
   var isString = System.get("src/utils/string.js").isString;
+  var isArray = System.get("src/utils/array.js").isArray;
+  var length = System.get("src/funs/length.js").default;
   function tail(xs) {
-    if (xs.length === 0) {
+    var len = length(xs);
+    if (!len) {
       return xs;
     }
-    if (Array.isArray(xs)) {
+    if (isArray(xs)) {
       return xs.slice(1);
     }
     if (isString(xs)) {
-      return xs.substring(1, xs.length);
+      return xs.substring(1, len);
     }
   }
   var $__default = tail;
@@ -176,8 +187,9 @@ System.registerModule("src/funs/uncons.js", [], function() {
   var isString = System.get("src/utils/string.js").isString;
   var head = System.get("src/funs/head.js").default;
   var tail = System.get("src/funs/tail.js").default;
+  var length = System.get("src/funs/length.js").default;
   function uncons(xs) {
-    if (xs.length === 0) {
+    if (!length(xs)) {
       return xs;
     }
     return {

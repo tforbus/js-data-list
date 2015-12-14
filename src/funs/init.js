@@ -1,4 +1,6 @@
 import { isString } from '../utils/string.js';
+import { isArray } from '../utils/array.js';
+import length from './length.js';
 
 /**
  * Return all elements except the last.
@@ -8,15 +10,17 @@ import { isString } from '../utils/string.js';
  * init('Foo') == 'Fo'
  */
 export default function init(xs) {
-    if (xs.length === 0) {
+    let len = length(xs);
+
+    if (!len) {
         return xs;
     }
 
-    if (Array.isArray(xs)) {
-        return xs.slice(-1 * xs.length + 1);
+    if (isArray(xs)) {
+        return xs.slice(-1 * len + 1);
     }
 
     if (isString(xs)) {
-        return xs.substring(0, xs.length - 1);
+        return xs.substring(0, len - 1);
     }
 }

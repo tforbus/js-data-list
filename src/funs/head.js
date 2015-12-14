@@ -1,4 +1,6 @@
 import { isString } from '../utils/string.js';
+import { isArray } from '../utils/array.js';
+import length from './length.js';
 
 /**
  * Return the first element of a list.
@@ -8,11 +10,11 @@ import { isString } from '../utils/string.js';
  * head('Foo') === 'F'
  */
 export default function head(xs) {
-    if (xs.length === 0) {
+    if (length(xs) === 0) {
         return xs;
     }
 
-    if (Array.isArray(xs)) {
+    if (isArray(xs)) {
         return xs[0];
     }
 
