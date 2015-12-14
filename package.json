@@ -1,0 +1,35 @@
+{
+  "name": "js-data-list",
+  "version": "0.1.0",
+  "description": "implementation of haskell's data.list in javascript",
+  "main": "js-data-list.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel": "^6.3.13",
+    "babel-preset-es2015": "^6.3.13",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-iife": "^0.2.4",
+    "gulp-sourcemaps": "^1.6.0"
+  },
+  "scripts": {
+    "test": "jasmine",
+    "build": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tforbus/js-data-list.git"
+  },
+  "keywords": [
+    "list",
+    "haskell",
+    "data"
+  ],
+  "author": "tristin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tforbus/js-data-list/issues"
+  },
+  "homepage": "https://github.com/tforbus/js-data-list#readme"
+}
