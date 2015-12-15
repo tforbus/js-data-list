@@ -7,16 +7,13 @@ import length from './length.js';
  * Decompose list into head and tail.
  *
  * Example:
- * uncons([1,2,3]) == {fst: 1, snd: [2,3]}
- * uncons('Hello') == {fst: 'H', snd: 'ello'}
+ * uncons([1,2,3]) == [1, [2,3]]
+ * uncons('Hello') == ['H', 'ello']
  */
 export default function uncons(xs) {
     if (!length(xs)) {
         return xs;
     }
 
-    return {
-        fst: head(xs),
-        snd: tail(xs)
-    };
+    return [head(xs), tail(xs)];
 }
