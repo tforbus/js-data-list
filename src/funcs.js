@@ -230,6 +230,20 @@
     };
 
     /**
+     * Returns an array where the first element is xs prefix of length n, and the
+     * second element is the remainder of the list.
+     * It is equivalent to calling [take(n, xs) drop(n, xs)]
+     *
+     * @example splitAt(3, [1,2,3,4,5]) == [[1,2,3], [4,5]]
+     * @param {int} n
+     * @param {array} xs
+     * @return {array}
+     */
+    lib.splitAt = function splitAt(n, xs) {
+        return [lib.take(n, xs), lib.drop(n, xs)];
+    };
+
+    /**
      * Extract the elements after the head of a list, which must be non-empty.
      *
      * @example tail([1,2,3]) == [2,3]
