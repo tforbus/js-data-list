@@ -60,6 +60,9 @@
 
     /**
      * Test whether a list is empty.
+     *
+     * @example isEmpty([]) == true
+     * @example isEmpty([1]) == false
      * @param {array} xs - the list
      * @return {boolean}
      */
@@ -99,17 +102,16 @@
     };
 
     /**
-     * Map a function to each element of a list or string and return the results.
-     * If xs is a string, the result returned will be cast back to a string.
-     * @param {function} fn
-     * @param {array} xs
-     * @return {any}
+     * map(fn, xs) is the list obtained by applying `fn` to each element of xs.
+     * The function `fn` is curried by default, which allows greater flexibility.
+     *
+     * @example map(function (x) { return x + 1 }, [1,2,3]) == [2,3,4]
+     * @example map(function (x, y) { return x + y; }, [1,2,3]) == [function(y) { return 1 + y; }, ...];
+     * @param {function} fn - the function to apply to each element in a list
+     * @param {array} xs - the list
+     * @return {array}
      */
     lib.map = function map(fn, xs) {
-        if (H.utils.isString(xs)) {
-            return H.utils.arrayToString(lib.map(fn, H.utils.stringToArray(xs)));
-        }
-
         var curriedFn = H.utils.curry(fn);
         var results = [];
         for (var i = 0, len = xs.length; i < len; i+=1) {
@@ -119,69 +121,67 @@
         return results;
     };
 
-    // TODO: custom sort
     /**
-     * Return the maximum element in a list or string.
+     * Returns the maximum value from a list, which must be non-empty, finite, 
+     * and of an ordered type (able to be compared with simple operators >, <, =).
+     * 
+     * @example maximum([1,2,3]) == 3
      * @param {array} xs
      * @return {any}
      */
     lib.maximum = function maximum(xs) {
-        if (lib.isEmpty(xs)) { return xs; }
+        if (lib.isEmpty(xs)) {
+            throw {
+                name: 'Exception',
+                message: 'H.maximum: empty list'
+            };
+        }
         if (lib.length(xs) === 1) { return xs[0]; }
 
-        var ht = lib.uncons(xs);
-        var head = ht[0];
-        var tail = ht[1];
-
-        if (H.utils.isString(tail)) {
-            tail = H.utils.stringToArray(tail);
-        }
+        var unc = lib.uncons(xs);
 
         // TODO: lib.reduce
-        return tail.reduce(function (previous, current) {
+        return unc.tail.reduce(function (previous, current) {
             if (previous < current) { return current; }
             return previous;
-        }, head);
+        }, unc.head);
     };
 
-    // TODO: custom sort
     /**
-     * Return the minimum element in a list or string.
+     * Returns the minimum value from a list, which must be non-empty, finite, 
+     * and of an ordered type (able to be compared with simple operators >, <, =).
+     *
+     * @example minimum([1, 2, 3]) == 1
      * @param {array} xs
      * @return {any}
      */
     lib.minimum = function minimum(xs) {
-        if (lib.isEmpty(xs)) { return xs; }
+        if (lib.isEmpty(xs)) {
+            throw {
+                name: 'Exception',
+                message: 'H.minimum: empty list'
+            };
+        }
         if (lib.length(xs) === 1) { return xs[0]; }
 
-        var ht = lib.uncons(xs);
-        var head = ht[0];
-        var tail = ht[1];
-
-        if (H.utils.isString(tail)) {
-            tail = H.utils.stringToArray(tail);
-        }
+        var unc = lib.uncons(xs);
 
         // TODO: lib.reduce
-        return tail.reduce(function (previous, current) {
+        return unc.tail.reduce(function (previous, current) {
             if (previous > current) { return current; }
             return previous;
-        }, head);
+        }, unc.head);
     };
 
     /**
-     * Reverse a list or string and return the results.
+     * Returns the elements of a list in reverse order. The list must be finite.
+     *
+     * @example revserse([1,2,3]) == [3,2,1]
      * @param {array} xs
      * @return {array}
      */
     lib.reverse = function reverse(xs) {
-        if (H.utils.isArray(xs)) {
-            return xs.reverse();
-        }
-
-        if (H.utils.isString(xs)) {
-            return H.utils.arrayToString(H.utils.stringToArray(xs).reverse());
-        }
+        return xs.reverse();
     };
 
     /**
@@ -210,7 +210,7 @@
      * Results can be accesesd by results[0] or results.head, and results[1] or results.tail.
      *
      * @example uncons([1,2,3]) == {0: 1, 1: [2,3], head: 1, tail: [2,3]}
-     * @param {array} xs - the array
+     * @param {array} xs - the list
      * @return {array}
      */
     lib.uncons = function uncons(xs) {
@@ -232,17 +232,24 @@
     /**
      * Takes two lists and returns the corresponding pairs. If one input list is short,
      * excess elements of the longer list are discarded.
-     * @example
-     * zip([1,2], ['a', 'b', 'c']) == [[1, 'a'], [2, 'b']]
-     * @param {array} xs
-     * @param {array} ys
+     *
+     * @example * zip([1,2], ['a', 'b', 'c']) == [[1, 'a'], [2, 'b']]
+     * @param {array} xs - first list
+     * @param {array} ys - second list
      * @return {array}
      */
     lib.zip = function zip(xs, ys) {
         var minLen = lib.minimum([xs.length, ys.length]);
-        return H.utils.zeroArray(minLen).map(function (x, index) {
-            return [xs[index], ys[index]];
-        });
+        var results = [];
+
+        for (var i = 0, len = minLen; i < len; i+=1) {
+            results.push([
+                xs[i],
+                ys[i]
+            ]);
+        }
+
+        return results;
     };
 
     Object.keys(lib).forEach(function (key) {
