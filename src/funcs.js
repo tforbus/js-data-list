@@ -16,6 +16,32 @@
     };
 
     /**
+     * Returns the suffix of xs after the first n elements, or [] if n > length xs.
+     * 
+     * @example drop(3, [1,2,3,4]) == [4]
+     * @param {int} n - number of elements to drop
+     * @param {array} xs - the list
+     * @return {array}
+     */
+    lib.drop = function drop(n, xs) {
+        var len = lib.length(xs);
+        if (n <= 0) {
+            return xs;
+        }
+
+        if (n > len) {
+            return [];
+        }
+
+        var results = [];
+        for (var i = n; i < len; i+=1) {
+            results.push(xs[i]);
+        }
+
+        return results;
+    };
+
+    /**
      * Extract the first element of a list, which must be non-empty.
      *
      * @example head([1,2,3]) == 1
@@ -195,12 +221,12 @@
     /**
      * Returns the elements of a list in reverse order. The list must be finite.
      *
-     * @example revserse([1,2,3]) == [3,2,1]
+     * @example reverse([1,2,3]) == [3,2,1]
      * @param {array} xs
      * @return {array}
      */
     lib.reverse = function reverse(xs) {
-        return xs.reverse();
+        return xs.slice().reverse();
     };
 
     /**
@@ -220,6 +246,31 @@
         }
 
         return xs.slice(1);
+    };
+
+    /**
+     * Returns the first `n` elements of a list `xs`, or the entire list `xs` if n > length(xs)
+     *
+     * @example take(3, [1,2]) == [1,2]
+     * @example take(2, [1,2,3]) == [1,2]
+     * @param {array} xs - the list
+     * @return {array}
+     */
+    lib.take = function take(n, xs) {
+        if (n <= 0 || lib.isEmpty(xs)) {
+            return [];
+        }
+
+        if (n > lib.length(xs)) {
+            return xs;
+        }
+
+        var result = [];
+        for (var i = 0; i < n; i++) {
+            result.push(xs[i]);
+        }
+
+        return result;
     };
 
     /**
