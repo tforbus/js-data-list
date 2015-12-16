@@ -102,6 +102,25 @@
     };
 
     /**
+     * List index operator, starting from 0.
+     *
+     * @example nth(1, [1,2,3]) == 2
+     * @param {int} n - the index
+     * @param {array} xs - the list
+     * @return {any}
+     */
+    lib.nth = function nth(n, xs) {
+        if (n > lib.length(xs)) {
+            throw {
+                name: 'Exception',
+                message: 'H.nth: index too large'
+            };
+        }
+
+        return xs[n];
+    };
+
+    /**
      * map(fn, xs) is the list obtained by applying `fn` to each element of xs.
      * The function `fn` is curried by default, which allows greater flexibility.
      *
@@ -114,7 +133,7 @@
     lib.map = function map(fn, xs) {
         var curriedFn = H.utils.curry(fn);
         var results = [];
-        for (var i = 0, len = xs.length; i < len; i+=1) {
+        for (var i = 0, len = lib.length(xs); i < len; i+=1) {
             results.push(curriedFn(xs[i]));
         }
 
@@ -239,14 +258,29 @@
      * @return {array}
      */
     lib.zip = function zip(xs, ys) {
-        var minLen = lib.minimum([xs.length, ys.length]);
+        return lib.zipN(xs, ys);
+    };
+
+    /**
+     * zipN is a generalized version of `zip`.
+     * It zips an arbitrary amount of lists.
+     *
+     * @return {array}
+     */
+    lib.zipN = function zipN() {
+        var lists = Array.prototype.slice.call(arguments);
+        var minLen = lib.minimum(lib.map(function (xs) { return lib.length(xs); }, lists));
         var results = [];
 
-        for (var i = 0, len = minLen; i < len; i+=1) {
-            results.push([
-                xs[i],
-                ys[i]
-            ]);
+        // Get the nth element for all lists in a list.
+        function _allAt(n, xss) {
+            return lib.map(function (xs) {
+                return lib.nth(n, xs);
+            }, xss);
+        }
+
+        for (var i = 0; i < minLen; i+=1) {
+            results.push(_allAt(i, lists));
         }
 
         return results;
