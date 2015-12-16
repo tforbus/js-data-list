@@ -42,6 +42,29 @@
     };
 
     /**
+     * Returns the suffix remaining after takeWhile(p, xs).
+     *
+     * @example dropWhile(function (x) { return x < 3; }, [1,2,3,4,5]) == [3,4,5]
+     * @param {Function} p - predicate function returning a boolean
+     * @param {array} xs - the list
+     * @return {array}
+     */
+    lib.dropWhile = function dropWhile(p, xs) {
+        var len = lib.length(xs);
+        if (len === 0) { return []; }
+
+        var list = xs.slice();
+        var isDropped = p(list[0]);
+
+        while(isDropped) {
+            list.shift();
+            isDropped = p(list[0]);
+        }
+
+        return list;
+    };
+
+    /**
      * Extract the first element of a list, which must be non-empty.
      *
      * @example head([1,2,3]) == 1
@@ -285,6 +308,34 @@
         }
 
         return result;
+    };
+
+    /**
+     * Return the longest prefix of xs of elements that satisfy predicate p.
+     *
+     * @example takeWhile(function (x) { return x < 3; }, [1,2,3,4,5]) == [1,2]
+     * @example takeWhile(function (x) { return x < 0; }, [1,2,3,4,5]) == []
+     * @param {Function} p - function returning a boolean value
+     * @param {array} xs - the list
+     * @return {array}
+     */
+    lib.takeWhile = function takeWhile(p, xs) {
+        var len = lib.length(xs);
+
+        if (len === 0) {
+            return [];
+        }
+
+        var results = [];
+        for (var i = 0; i < len; i+=1) {
+            if (p(xs[i])) {
+                results.push(xs[i]);
+            } else {
+                break;
+            }
+        }
+
+        return results;
     };
 
     /**

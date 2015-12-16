@@ -27,9 +27,6 @@ Each function might be able to handle infinite lists, but that's a stretch goal.
 - replicate
 - cycle
 - unfoldr
-- splitAt
-- takeWhile
-- dropWhile
 - dropWhileEnd
 - span
 - break
