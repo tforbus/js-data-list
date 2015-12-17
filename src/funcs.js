@@ -104,6 +104,26 @@
     };
 
     /**
+     * Concatenates a list of lists.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Array.<Array.<T>>} xss - list of lists
+     * @return {Array<T>}
+     *
+     * @example
+     *
+     * concat([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ])
+     * // => [1, 2, 3, 4, 5, 6, 7, 8, 9]
+     */
+    H.concat = function concat(xss) {
+        if (H.isEmpty(xss)) { return []; }
+        var unc = H.uncons(xss);
+        return H.append(unc.head, H.concat(unc.tail));
+    };
+
+    /**
      * Returns the suffix of xs after the first n elements, or [] if n > length xs.
      * 
      * @category Sublists
