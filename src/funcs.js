@@ -810,7 +810,6 @@
     H.zipN = function zipN() {
         var lists = Array.prototype.slice.call(arguments);
         var minLen = H.minimum(H.map(function (xs) { return H.length(xs); }, lists));
-        var results = [];
 
         // Get the nth element for all lists in a list.
         function _allAt(n, xss) {
@@ -819,11 +818,17 @@
             }, xss);
         }
 
-        for (var i = 0; i < minLen; i+=1) {
-            results.push(_allAt(i, lists));
+        function _zipN(allLists, acc, currentN, maxN) {
+            if (currentN >= maxN) {
+                return acc;
+            }
+
+            var allAtCurrent = _allAt(currentN, allLists);
+            var appended = H.append(acc, [allAtCurrent]);
+            return _zipN(allLists, appended, currentN+1, maxN);
         }
 
-        return results;
+        return _zipN(lists, [], 0, minLen);
     };
 
 
