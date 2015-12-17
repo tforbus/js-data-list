@@ -22,6 +22,9 @@
      * It is the equivalent of span (not p, xs)
      * 
      * @example breakList(function (x) { return x > 3; }, [1,2,3,4,1,2]) == [ [1,2,3], [4,1,2] ]
+     * @param {Function} p - predicate function
+     * @param {array} xs - the list
+     * @return {array} xss
      */
     lib.breakList = function breakList(p, xs) {
         var not = H.utils.curry(function (p, x) {
