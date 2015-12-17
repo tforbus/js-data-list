@@ -469,12 +469,16 @@
      */
     H.map = function map(fn, xs) {
         var curriedFn = utils.curry(fn);
-        var results = [];
-        for (var i = 0, len = H.length(xs); i < len; i+=1) {
-            results.push(curriedFn(xs[i]));
+        function _map(f, xs, acc) {
+            if (H.isEmpty(xs)) {
+                return acc;
+            }
+
+            var unc = H.uncons(xs);
+            return _map(f, unc.tail, H.append(acc, [f(unc.head)]));
         }
 
-        return results;
+        return _map(curriedFn, xs, []);
     };
 
     /**
@@ -718,12 +722,7 @@
             return xs;
         }
 
-        var result = [];
-        for (var i = 0; i < n; i++) {
-            result.push(xs[i]);
-        }
-
-        return result;
+        return xs.slice(0, n);
     };
 
     /**
@@ -747,22 +746,11 @@
      * // => []
      */
     H.takeWhile = function takeWhile(p, xs) {
-        var len = H.length(xs);
-
-        if (len === 0) {
+        if (H.isEmpty(xs) || !p(H.head(xs))) {
             return [];
         }
 
-        var results = [];
-        for (var i = 0; i < len; i+=1) {
-            if (p(xs[i])) {
-                results.push(xs[i]);
-            } else {
-                break;
-            }
-        }
-
-        return results;
+        return H.append([H.head(xs)], takeWhile(p, H.tail(xs)));
     };
 
     /**
