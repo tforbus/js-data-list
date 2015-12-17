@@ -629,17 +629,15 @@
      * //=> [4, 5, 6]
      */
     H.stripPrefix = function stripPrefix(prefix, xs) {
-        var pLen = H.length(prefix);
-        var result = [];
-
-        for (var i = 0; i < pLen; i++) {
-            // List does not begin with prefix.
-            if (prefix[i] !== xs[i]) {
-                return null;
-            }
+        if (H.isEmpty(prefix)) {
+            return xs;
         }
 
-        return H.drop(pLen, xs);
+        if (H.head(prefix) !== H.head(xs)) {
+            return null;
+        }
+
+        return stripPrefix(H.tail(prefix), H.tail(xs));
     };
 
     /**
