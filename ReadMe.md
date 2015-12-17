@@ -9,7 +9,9 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - head
 - last
 - tail
+- tails
 - init
+- inits
 - uncons
 - null as isEmpty
 - length
@@ -55,8 +57,6 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - cycle
 - unfoldr
 - group
-- inits
-- tails
 - isPrefixOf
 - isSuffixOf
 - isInfixOf
