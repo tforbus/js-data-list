@@ -135,18 +135,10 @@
      * // => [3,4,5]
      */
     H.dropWhile = function dropWhile(p, xs) {
-        var len = H.length(xs);
-        if (len === 0) { return []; }
-
-        var list = xs.slice();
-        var isDropped = p(list[0]);
-
-        while(isDropped && H.length(list)) {
-            list.shift();
-            isDropped = p(list[0]);
+        if (H.isEmpty(xs) || !p(H.head(xs))) {
+            return xs;
         }
-
-        return list;
+        return dropWhile(p, H.tail(xs));
     };
 
     /**
