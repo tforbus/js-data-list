@@ -43,6 +43,22 @@
          */
         zeroArray: function (size) {
             return new Array(size + 1).join(0).split('').map(parseFloat);
+        },
+
+        /**
+         * Supplied with a predicate function p, return a function that will inverse
+         * the results of p(x)
+         * @private
+         * @memberof utils
+         * @param {Function} p - predicate function
+         * @return {Function}
+         */
+        not: function (p) {
+            var curried = utils.curry(function (p, x) {
+                return !p(x);
+            });
+
+            return curried(p);
         }
     };
 
@@ -84,11 +100,8 @@
      * // => [ [1,2,3], [4,1,2] ]
      */
     H.breakList = function breakList(p, xs) {
-        var not = utils.curry(function (p, x) {
-            return !p(x);
-        });
-
-        return H.span(not(p), xs);
+        var not = utils.not(p);
+        return H.span(not, xs);
     };
 
     /**
@@ -159,6 +172,62 @@
     H.dropWhileEnd = function dropWhileEnd(p, xs) {
         var list = H.reverse(xs);
         return H.reverse(H.dropWhile(p, list));
+    };
+
+    /**
+     * Return the elements in xs which satisfy predicate p.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {Function} p - the predicate
+     * @param {Array} xs - the list
+     * @return {Array}
+     *
+     * @example
+     * filter(x => x % 2 == 1, [1, 2, 3, 4, 5])
+     * // => [1, 3, 5]
+     */
+    H.filter = function filter(p, xs) {
+        function _filter(p, xs, acc) {
+            if (H.isEmpty(xs)) {
+                return acc;
+            }
+
+            var unc = H.uncons(xs);
+            var appended = p(unc.head) ? H.append(acc, [unc.head]) : acc;
+            return _filter(p, unc.tail, appended);
+        }
+
+        return _filter(p, xs, []);
+    };
+
+    /**
+     * Return the first element in a list xs which matches predicate p.
+     * Return null if the element does not exist.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {Function} p - the predicate function
+     * @param {Array.<T>} xs - the list
+     * @return {?T}
+     *
+     * @example
+     * find(x => x > 4, [1, 2, 3, 4, 5, 6])
+     * // => 5
+     */
+    H.find = function find(p, xs) {
+        if (H.isEmpty(xs)) {
+            return null;
+        }
+
+        var unc = H.uncons(xs);
+        if (p(unc.head)) {
+            return unc.head;
+        }
+
+        return find(p, unc.tail);
     };
 
     /**
@@ -547,6 +616,27 @@
             if (previous > current) { return current; }
             return previous;
         }, unc.head);
+    };
+
+    /**
+     * Returns a pair of lists, where the first list is a list containing elements from
+     * xs which satisfy predicate p, and the second list contains elements from xs which do
+     * not satisfy p.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {Function} p - the predicate
+     * @param {Array} xs - the list
+     * @return {Array.<Array>}
+     *
+     * @example
+     *
+     * partition(x => x > 3, [1, 2, 3, 4, 5])
+     * // => [ [4, 5], [1, 2, 3] ]
+     */
+    H.partition = function partition(p, xs) {
+        return [ H.filter(p, xs), H.filter(utils.not(p), xs) ];
     };
 
     /**
