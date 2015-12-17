@@ -629,6 +629,10 @@
      * //=> [4, 5, 6]
      */
     H.stripPrefix = function stripPrefix(prefix, xs) {
+        if (H.length(prefix) > H.length(xs)) {
+            return null;
+        }
+
         if (H.isEmpty(prefix)) {
             return xs;
         }

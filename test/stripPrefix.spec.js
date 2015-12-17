@@ -12,4 +12,8 @@ describe('stripPrefix', function () {
     it('should return null if the prefix is not in the beginning of the list', function () {
         expect(stripPrefix([1,2,3], [4,5,6])).toBe(null);
     });
+
+    it('should return null if length prefix > length xs', function () {
+        expect(stripPrefix([4,5,6], [1,2])).toBe(null);
+    });
 });
