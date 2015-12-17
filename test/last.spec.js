@@ -1,9 +1,7 @@
 describe('last', function () {
     var last;
-    var isArray;
     beforeEach(function () {
         last = H.last;
-        isArray = H.utils.isArray;
     });
 
     it('should throw an error for an empty list', function () {

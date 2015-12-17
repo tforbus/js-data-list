@@ -1,13 +1,41 @@
-(function (H) {
+(function () {
     'use strict';
 
+    /** @todo set to correct root */
+    window.H = {};
+
+    /**
+     * H is a port of Haskell's Data.List functions into JavaScript.
+     * @namespace H
+     */
     var lib = { };
+
+    var utils = {
+        curry: function curry (fn) {
+            var arity = fn.length;
+            return (function resolver() {
+                var memory = Array.prototype.slice.call(arguments);
+                return function () {
+                    var localArgs = memory.slice();
+                    Array.prototype.push.apply(localArgs, arguments);
+
+                    var func = localArgs.length >= arity ? fn : resolver;
+                    return func.apply(null, localArgs);
+                };
+            }());
+        },
+
+        zeroArray: function (size) {
+            return new Array(size + 1).join(0).split('').map(parseFloat);
+        }
+    };
 
     /**
      * Append two lists.
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array} xs - the first list
      * @param {Array} ys - the second list
      * @return {Array}
@@ -29,6 +57,7 @@
      * 
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Function} p - predicate function
      * @param {Array} xs - the list
      * @return {Array.<Array>}
@@ -39,7 +68,7 @@
      * // => [ [1,2,3], [4,1,2] ]
      */
     lib.breakList = function breakList(p, xs) {
-        var not = H.utils.curry(function (p, x) {
+        var not = utils.curry(function (p, x) {
             return !p(x);
         });
 
@@ -51,6 +80,7 @@
      * 
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Number} n - number of elements to drop
      * @param {Array} xs - the list
      * @return {Array}
@@ -83,6 +113,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Function} p - predicate function returning a boolean
      * @param {Array} xs - the list
      * @return {Array}
@@ -112,6 +143,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Function} p - predicate function
      * @param {Array} xs - the list
      * @return {Array}
@@ -131,6 +163,7 @@
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array.<T>} xs - the list
      * @return {T}
      * @throws Will throw an error if the list is empty.
@@ -157,6 +190,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Array} xs - the list
      * @return {Array.<Array>}
      *
@@ -197,6 +231,7 @@
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array} xs - the list
      * @return {Array}
      * @throws Will throw an error if the list is empty.
@@ -230,6 +265,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Array} xs
      * @return {Array.<Array>}
      *
@@ -254,6 +290,7 @@
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array} xs - the list
      * @return {Boolean}
      *
@@ -271,6 +308,7 @@
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array.<T>} xs - the list
      * @return {T}
      * @throws Will throw an error if the list is empty.
@@ -297,6 +335,7 @@
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array} xs - the list
      * @return {Number}
      *
@@ -315,6 +354,7 @@
      *
      * @category Indexing
      * @public
+     * @memberof H
      * @param {Number} n - the index
      * @param {Array.<T>} xs - the list
      * @return {T}
@@ -342,6 +382,7 @@
      *
      * @category Transformations
      * @public
+     * @memberof H
      * @param {Function} fn - the function to apply to each element in a list
      * @param {Array} xs - the list
      * @return {Array}
@@ -357,7 +398,7 @@
      * // => [ function (y) { return 1 + y }, function (y) { return 2 + y} ]
      */
     lib.map = function map(fn, xs) {
-        var curriedFn = H.utils.curry(fn);
+        var curriedFn = utils.curry(fn);
         var results = [];
         for (var i = 0, len = lib.length(xs); i < len; i+=1) {
             results.push(curriedFn(xs[i]));
@@ -372,6 +413,7 @@
      * 
      * @category Folds
      * @public
+     * @memberof H
      * @param {Array.<T>} xs
      * @return {T}
      * @throws Will throw an error if the list is empty.
@@ -405,6 +447,7 @@
      *
      * @category Folds
      * @public
+     * @memberof H
      * @param {Array.<T>} xs
      * @return {T}
      * @throws Will throw an error if the list is empty.
@@ -437,6 +480,7 @@
      *
      * @category Transformations
      * @public
+     * @memberof H
      * @param {Array} xs
      * @return {Array}
      *
@@ -455,6 +499,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Function} p - predicate function
      * @param {Array.<T>} xs - the list
      * @return {Array.<Array.<T>>}
@@ -475,6 +520,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Number} n
      * @param {Array.<T>} xs
      * @return {Array.<Array.<T>>}
@@ -493,6 +539,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Array} prefix - prefix list
      * @param {Array} xs - queried list
      * @return {?Array}
@@ -526,6 +573,7 @@
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array.<T>} xs - the list
      * @return {Array.<T>}
      * @throws Will throw an error if the list is empty.
@@ -552,6 +600,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Array.<T>} xs
      * @return {Array.<Array.<T>>}
      *
@@ -576,6 +625,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Array.<T>} xs - the list
      * @return {Array.<T>}
      *
@@ -611,6 +661,7 @@
      *
      * @category Sublists
      * @public
+     * @memberof H
      * @param {Function} p - function returning a boolean value
      * @param {Array.<T>} xs - the list
      * @return {Array.<T>}
@@ -651,6 +702,7 @@
      *
      * @category Basic
      * @public
+     * @memberof H
      * @param {Array.<T>} xs - the list
      * @return {Object.<T, Array.<T>>}
      *
@@ -676,6 +728,7 @@
      *
      * @category Zips
      * @public
+     * @memberof H
      * @param {Array} xs - first list
      * @param {Array} ys - second list
      * @return {Array.<Array>}
@@ -695,6 +748,7 @@
      *
      * @category Zips
      * @public
+     * @memberof H
      * @return {Array.<Array>}
      */
     lib.zipN = function zipN() {
@@ -717,9 +771,9 @@
     };
 
     Object.keys(lib).forEach(function (key) {
-        H[key] = H.utils.curry(lib[key]);
+        H[key] = utils.curry(lib[key]);
     });
 
     return H;
 
-}(H || {}));
+}());
