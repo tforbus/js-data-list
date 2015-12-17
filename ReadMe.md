@@ -3,6 +3,31 @@ This library will be a JavaScript port of Haskell's Data.list.
 Each function will be able to be partially applied, just like in Haskell.
 Each function might be able to handle infinite lists, but that's a stretch goal.
 
+## Implemented
+(++) as append
+head
+last
+tail
+init
+uncons
+null as isEmpty
+length
+map
+reverse
+maximum
+minimum
+take
+drop
+splitAt
+takeWhile
+dropWhile
+dropWhileEnd
+span
+break as breakList
+(!!) as nth
+zip
+zip3 -- zip7 as zipN
+
 ## Todo
 - intersperse
 - intercalate
