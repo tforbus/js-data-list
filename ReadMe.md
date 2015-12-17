@@ -32,6 +32,9 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - (!!) as nth
 - zip
 - zip3 -- zip7 as zipN
+- elem as isElem
+- notElem as isNotElem
+- lookup
 
 ## Todo
 - intersperse
@@ -61,9 +64,6 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - isSuffixOf
 - isInfixOf
 - isSubsequenceOf
-- elem
-- notElem
-- lookup
 - find
 - filter
 - partition

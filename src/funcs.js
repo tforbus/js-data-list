@@ -1,16 +1,25 @@
 (function () {
     'use strict';
 
-    /** @todo set to correct root */
-    window.H = {};
-
     /**
-     * H is a port of Haskell's Data.List functions into JavaScript.
+     * H is a port of Haskell's Data.List into JavaScript.
      * @namespace H
      */
-    var lib = { };
+    var H = {};
 
+    /**
+     * Utility functions used within H.
+     * @private
+     * @namespace utils
+     */
     var utils = {
+        /**
+         * Curries a function.
+         * @private
+         * @memberof utils
+         * @param {Function} fn
+         * @return {Function}
+         */
         curry: function curry (fn) {
             var arity = fn.length;
             return (function resolver() {
@@ -25,6 +34,13 @@
             }());
         },
 
+        /**
+         * Creates an array of length `size` full of 0s.
+         * @private
+         * @memberof utils
+         * @param {Number} size
+         * @return {Array}
+         */
         zeroArray: function (size) {
             return new Array(size + 1).join(0).split('').map(parseFloat);
         }
@@ -45,7 +61,7 @@
      * append([1, 2, 3], [4, 5])
      * // => [1, 2, 3, 4, 5]
      */
-    lib.append = function append(xs, ys) {
+    H.append = function append(xs, ys) {
         return xs.concat(ys);
     };
 
@@ -67,12 +83,12 @@
      * breakList(x => x < 3, [1, 2, 3, 4, 1, 2])
      * // => [ [1,2,3], [4,1,2] ]
      */
-    lib.breakList = function breakList(p, xs) {
+    H.breakList = function breakList(p, xs) {
         var not = utils.curry(function (p, x) {
             return !p(x);
         });
 
-        return lib.span(not(p), xs);
+        return H.span(not(p), xs);
     };
 
     /**
@@ -90,8 +106,8 @@
      * drop(3, [10 ,20, 30, 40])
      * // => [40]
      */
-    lib.drop = function drop(n, xs) {
-        var len = lib.length(xs);
+    H.drop = function drop(n, xs) {
+        var len = H.length(xs);
         if (n <= 0) {
             return xs;
         }
@@ -123,14 +139,14 @@
      * dropWhile(x => x < 3, [1, 2, 3, 4, 5])
      * // => [3,4,5]
      */
-    lib.dropWhile = function dropWhile(p, xs) {
-        var len = lib.length(xs);
+    H.dropWhile = function dropWhile(p, xs) {
+        var len = H.length(xs);
         if (len === 0) { return []; }
 
         var list = xs.slice();
         var isDropped = p(list[0]);
 
-        while(isDropped && lib.length(list)) {
+        while(isDropped && H.length(list)) {
             list.shift();
             isDropped = p(list[0]);
         }
@@ -153,9 +169,9 @@
      * dropWhileEnd(x => x < 3, [1, 5, 4, 3, 2, 1])
      * // => [1, 5, 4, 3]
      */
-    lib.dropWhileEnd = function dropWhileEnd(p, xs) {
-        var list = lib.reverse(xs);
-        return lib.reverse(lib.dropWhile(p, list));
+    H.dropWhileEnd = function dropWhileEnd(p, xs) {
+        var list = H.reverse(xs);
+        return H.reverse(H.dropWhile(p, list));
     };
 
     /**
@@ -173,8 +189,8 @@
      * head([1, 2, 3])
      * // => 1
      */
-    lib.head = function head(xs) {
-        if (lib.isEmpty(xs)) {
+    H.head = function head(xs) {
+        if (H.isEmpty(xs)) {
             throw {
                 name: 'Exception',
                 message: 'H.head: empty list'
@@ -199,14 +215,14 @@
      * group([1, 1, 1, 2, 2, 3, 1])
      * // => [ [1,1,1], [2,2], [3], [1] ]
      */
-    lib.group = function group(xs) {
+    H.group = function group(xs) {
         function _group(list, acc, accIndex) {
-            if (lib.isEmpty(list)) {
+            if (H.isEmpty(list)) {
                 return acc;
             }
 
-            var unc = lib.uncons(list);
-            if (lib.isEmpty(acc)) {
+            var unc = H.uncons(list);
+            if (H.isEmpty(acc)) {
                 acc.push([unc.head]);
             }
             
@@ -241,8 +257,8 @@
      * init([1, 2, 3])
      * // => [1,2]
      */
-    lib.init = function init(xs) {
-        var len = lib.length(xs);
+    H.init = function init(xs) {
+        var len = H.length(xs);
         if (!len) {
             throw {
                 name: 'Exception',
@@ -274,15 +290,34 @@
      * inits([1, 2, 3])
      * // => [ [], [1], [1,2], [1,2,3] ]
      */
-    lib.inits = function inits(xs) {
+    H.inits = function inits(xs) {
         function _inits(list, acc) {
             acc.unshift(list);
-            if (lib.isEmpty(list)) {
+            if (H.isEmpty(list)) {
                 return acc;
             }
-            return _inits(lib.init(list), acc);
+            return _inits(H.init(list), acc);
         }
         return _inits(xs, []);
+    };
+
+    /**
+     * List membership predicate. Returns if the element exists in the list.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {T} x - the element to check for
+     * @param {Array.<T>} xs - the list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * isElem(1, [1, 2, 3])
+     * // => true
+     */
+    H.isElem = function isElem(x, xs) {
+        return xs.indexOf(x) >= 0;
     };
 
     /**
@@ -299,8 +334,27 @@
      * isEmpty([])
      * // => true
      */
-    lib.isEmpty = function isEmpty(xs) {
+    H.isEmpty = function isEmpty(xs) {
         return !xs || !xs.length;
+    };
+
+    /**
+     * The negation of `isElem`.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {T} x - the element to check for
+     * @param {Array.<T>} xs - the list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * isElem(1, [1, 2, 3])
+     * // => false
+     */
+    H.isNotElem = function isNotElem(x, xs) {
+        return !H.isElem(x, xs);
     };
 
     /**
@@ -318,8 +372,8 @@
      * last([1, 2, 3])
      * // => 3
      */
-    lib.last = function last(xs) {
-        var len = lib.length(xs);
+    H.last = function last(xs) {
+        var len = H.length(xs);
         if (!len) {
             throw {
                 name: 'Exception',
@@ -344,9 +398,38 @@
      * length([10, 11, 12])
      * // => 33
      */
-    lib.length = function length(xs) {
-        if (lib.isEmpty(xs)) { return 0; }
+    H.length = function length(xs) {
+        if (H.isEmpty(xs)) { return 0; }
         return xs.length;
+    };
+
+    /**
+     * Looks up a key in an object.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {String} key - object property
+     * @param {Object} hash
+     * @return {Object.<T>?}
+     *
+     * @example
+     *
+     * lookup('foo', { foo: 1, bar: 2 })
+     * // => 1
+     *
+     * @example
+     *
+     * lookup('foo', { bar: 2, baz: 3 })
+     * // => undefined
+     */
+    H.lookup = function lookup(key, hash) {
+        var keys = Object.keys(hash);
+        if (H.isElem(key, keys)) {
+            return hash[key];
+        }
+
+        return undefined;
     };
 
     /**
@@ -365,8 +448,8 @@
      * nth(1, [10, 20, 30])
      * // => 20
      */
-    lib.nth = function nth(n, xs) {
-        if (n > lib.length(xs)) {
+    H.nth = function nth(n, xs) {
+        if (n > H.length(xs)) {
             throw {
                 name: 'Exception',
                 message: 'H.nth: index too large'
@@ -397,10 +480,10 @@
      * map(function (x, y) { return x + y; }, [1, 2])
      * // => [ function (y) { return 1 + y }, function (y) { return 2 + y} ]
      */
-    lib.map = function map(fn, xs) {
+    H.map = function map(fn, xs) {
         var curriedFn = utils.curry(fn);
         var results = [];
-        for (var i = 0, len = lib.length(xs); i < len; i+=1) {
+        for (var i = 0, len = H.length(xs); i < len; i+=1) {
             results.push(curriedFn(xs[i]));
         }
 
@@ -423,18 +506,18 @@
      * maximum([10, 20, 30])
      * // => 30
      */
-    lib.maximum = function maximum(xs) {
-        if (lib.isEmpty(xs)) {
+    H.maximum = function maximum(xs) {
+        if (H.isEmpty(xs)) {
             throw {
                 name: 'Exception',
                 message: 'H.maximum: empty list'
             };
         }
-        if (lib.length(xs) === 1) { return xs[0]; }
+        if (H.length(xs) === 1) { return xs[0]; }
 
-        var unc = lib.uncons(xs);
+        var unc = H.uncons(xs);
 
-        // TODO: lib.reduce
+        // TODO: H.reduce
         return unc.tail.reduce(function (previous, current) {
             if (previous < current) { return current; }
             return previous;
@@ -457,18 +540,18 @@
      * minimum([10, 20, 30])
      * // => 10
      */
-    lib.minimum = function minimum(xs) {
-        if (lib.isEmpty(xs)) {
+    H.minimum = function minimum(xs) {
+        if (H.isEmpty(xs)) {
             throw {
                 name: 'Exception',
                 message: 'H.minimum: empty list'
             };
         }
-        if (lib.length(xs) === 1) { return xs[0]; }
+        if (H.length(xs) === 1) { return xs[0]; }
 
-        var unc = lib.uncons(xs);
+        var unc = H.uncons(xs);
 
-        // TODO: lib.reduce
+        // TODO: H.reduce
         return unc.tail.reduce(function (previous, current) {
             if (previous > current) { return current; }
             return previous;
@@ -488,7 +571,7 @@
      * reverse([10, 20, 30])
      * // => [30, 20, 10]
      */
-    lib.reverse = function reverse(xs) {
+    H.reverse = function reverse(xs) {
         return xs.slice().reverse();
     };
 
@@ -509,8 +592,8 @@
      * span(x => x < 3, [1, 2, 3, 4, 1, 2, 3])
      * // => [ [1,2], [4,1,2,3] ]
      */
-    lib.span = function span(p, xs) {
-        return [lib.takeWhile(p, xs), lib.dropWhile(p, xs)];
+    H.span = function span(p, xs) {
+        return [H.takeWhile(p, xs), H.dropWhile(p, xs)];
     };
 
     /**
@@ -529,8 +612,8 @@
      * splitAt(3, [1, 2, 3, 4, 5])
      * // => [ [1,2,3], [4,5] ]
      */
-    lib.splitAt = function splitAt(n, xs) {
-        return [lib.take(n, xs), lib.drop(n, xs)];
+    H.splitAt = function splitAt(n, xs) {
+        return [H.take(n, xs), H.drop(n, xs)];
     };
 
     /**
@@ -554,8 +637,8 @@
      * stripPrefix([1, 2, 3], [1, 2, 3, 4, 5, 6])
      * //=> [4, 5, 6]
      */
-    lib.stripPrefix = function stripPrefix(prefix, xs) {
-        var pLen = lib.length(prefix);
+    H.stripPrefix = function stripPrefix(prefix, xs) {
+        var pLen = H.length(prefix);
         var result = [];
 
         for (var i = 0; i < pLen; i++) {
@@ -565,7 +648,7 @@
             }
         }
 
-        return xs.slice(pLen, lib.length(xs));
+        return xs.slice(pLen, H.length(xs));
     };
 
     /**
@@ -583,9 +666,9 @@
      * tail([1, 2, 3])
      * // => [2, 3]
      */
-    lib.tail = function tail(xs) {
-        var len = lib.length(xs);
-        if (lib.isEmpty(xs)) {
+    H.tail = function tail(xs) {
+        var len = H.length(xs);
+        if (H.isEmpty(xs)) {
             throw {
                 name: 'Exception',
                 message: 'H.tail: empty list'
@@ -609,13 +692,13 @@
      * tails([1, 2, 3])
      * // => [ [1,2,3], [2,3], [3], [] ]
      */
-    lib.tails = function tails(xs) {
+    H.tails = function tails(xs) {
         function _tails(list, acc) {
             acc.push(list);
-            if (lib.isEmpty(list)) {
+            if (H.isEmpty(list)) {
                 return acc;
             }
-            return _tails(lib.tail(list), acc);
+            return _tails(H.tail(list), acc);
         }
         return _tails(xs, []);
     };
@@ -639,12 +722,12 @@
      * take(2, [10, 20, 30])
      * // => [10, 20]
      */
-    lib.take = function take(n, xs) {
-        if (n <= 0 || lib.isEmpty(xs)) {
+    H.take = function take(n, xs) {
+        if (n <= 0 || H.isEmpty(xs)) {
             return [];
         }
 
-        if (n > lib.length(xs)) {
+        if (n > H.length(xs)) {
             return xs;
         }
 
@@ -676,8 +759,8 @@
      * takeWhile(x => x < 0, [1, 2, 3, 4, 5])
      * // => []
      */
-    lib.takeWhile = function takeWhile(p, xs) {
-        var len = lib.length(xs);
+    H.takeWhile = function takeWhile(p, xs) {
+        var len = H.length(xs);
 
         if (len === 0) {
             return [];
@@ -711,14 +794,14 @@
      * uncons([1,2, 3])
      * // => { head: 1, tail: [2, 3] }
      */
-    lib.uncons = function uncons(xs) {
-        if (lib.isEmpty(xs)) {
+    H.uncons = function uncons(xs) {
+        if (H.isEmpty(xs)) {
             return null;
         }
 
         return {
-            head: lib.head(xs),
-            tail: lib.tail(xs)
+            head: H.head(xs),
+            tail: H.tail(xs)
         };
     };
 
@@ -738,8 +821,8 @@
      * zip([1, 2], ['a', 'b', 'c'])
      * // => [[1, 'a'], [2, 'b']]
      */
-    lib.zip = function zip(xs, ys) {
-        return lib.zipN(xs, ys);
+    H.zip = function zip(xs, ys) {
+        return H.zipN(xs, ys);
     };
 
     /**
@@ -751,15 +834,15 @@
      * @memberof H
      * @return {Array.<Array>}
      */
-    lib.zipN = function zipN() {
+    H.zipN = function zipN() {
         var lists = Array.prototype.slice.call(arguments);
-        var minLen = lib.minimum(lib.map(function (xs) { return lib.length(xs); }, lists));
+        var minLen = H.minimum(H.map(function (xs) { return H.length(xs); }, lists));
         var results = [];
 
         // Get the nth element for all lists in a list.
         function _allAt(n, xss) {
-            return lib.map(function (xs) {
-                return lib.nth(n, xs);
+            return H.map(function (xs) {
+                return H.nth(n, xs);
             }, xss);
         }
 
@@ -770,9 +853,13 @@
         return results;
     };
 
-    Object.keys(lib).forEach(function (key) {
-        H[key] = utils.curry(lib[key]);
-    });
+
+    // Curry functions by default
+    H.map(function (key) {
+        H[key] = utils.curry(H[key]);
+    }, Object.keys(H));
+
+    window.H = H;
 
     return H;
 
