@@ -1,4 +1,32 @@
-(function (H) {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: funcs.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: funcs.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function (H) {
     'use strict';
 
     var lib = { };
@@ -7,7 +35,6 @@
      * Append two lists.
      *
      * @category Basic
-     * @public
      * @param {Array} xs - the first list
      * @param {Array} ys - the second list
      * @return {Array}
@@ -28,14 +55,13 @@
      * It is the equivalent of span (not p, xs)
      * 
      * @category Sublists
-     * @public
      * @param {Function} p - predicate function
      * @param {Array} xs - the list
-     * @return {Array.<Array>}
+     * @return {Array.&lt;Array>}
      *
      * @example
      * 
-     * breakList(x => x < 3, [1, 2, 3, 4, 1, 2])
+     * breakList(x => x &lt; 3, [1, 2, 3, 4, 1, 2])
      * // => [ [1,2,3], [4,1,2] ]
      */
     lib.breakList = function breakList(p, xs) {
@@ -50,7 +76,6 @@
      * Returns the suffix of xs after the first n elements, or [] if n > length xs.
      * 
      * @category Sublists
-     * @public
      * @param {Number} n - number of elements to drop
      * @param {Array} xs - the list
      * @return {Array}
@@ -62,7 +87,7 @@
      */
     lib.drop = function drop(n, xs) {
         var len = lib.length(xs);
-        if (n <= 0) {
+        if (n &lt;= 0) {
             return xs;
         }
 
@@ -71,7 +96,7 @@
         }
 
         var results = [];
-        for (var i = n; i < len; i+=1) {
+        for (var i = n; i &lt; len; i+=1) {
             results.push(xs[i]);
         }
 
@@ -82,14 +107,13 @@
      * Returns the suffix remaining after takeWhile(p, xs).
      *
      * @category Sublists
-     * @public
      * @param {Function} p - predicate function returning a boolean
      * @param {Array} xs - the list
      * @return {Array}
      *
      * @example
      *
-     * dropWhile(x => x < 3, [1, 2, 3, 4, 5])
+     * dropWhile(x => x &lt; 3, [1, 2, 3, 4, 5])
      * // => [3,4,5]
      */
     lib.dropWhile = function dropWhile(p, xs) {
@@ -99,7 +123,7 @@
         var list = xs.slice();
         var isDropped = p(list[0]);
 
-        while(isDropped && lib.length(list)) {
+        while(isDropped &amp;&amp; lib.length(list)) {
             list.shift();
             isDropped = p(list[0]);
         }
@@ -111,14 +135,13 @@
      * Drops the largest suffix of a list in which the predicate holds for all elements.
      *
      * @category Sublists
-     * @public
      * @param {Function} p - predicate function
      * @param {Array} xs - the list
      * @return {Array}
      *
      * @example
      *
-     * dropWhileEnd(x => x < 3, [1, 5, 4, 3, 2, 1])
+     * dropWhileEnd(x => x &lt; 3, [1, 5, 4, 3, 2, 1])
      * // => [1, 5, 4, 3]
      */
     lib.dropWhileEnd = function dropWhileEnd(p, xs) {
@@ -130,8 +153,7 @@
      * Extract the first element of a list, which must be non-empty.
      *
      * @category Basic
-     * @public
-     * @param {Array.<T>} xs - the list
+     * @param {Array&lt;T>} xs - the list
      * @return {T}
      * @throws Will throw an error if the list is empty.
      *
@@ -155,15 +177,9 @@
      * is equal to the argument. Moreover, each sublist in the result contains only equal 
      * elements.
      *
-     * @category Sublists
-     * @public
-     * @param {Array} xs - the list
-     * @return {Array.<Array>}
-     *
-     * @example
-     *
-     * group([1, 1, 1, 2, 2, 3, 1])
-     * // => [ [1,1,1], [2,2], [3], [1] ]
+     * @example group([1,1,1,2,2,3,1]) == [ [1,1,1], [2,2], [3], [1] ]
+     * @param {Array} xs
+     * @return {Array}
      */
     lib.group = function group(xs) {
         function _group(list, acc, accIndex) {
@@ -195,16 +211,9 @@
     /**
      * Returns all the elements of a list except the last one. The list must be non-empty.
      *
-     * @category Basic
-     * @public
+     * @example init([1,2,3]) == [1,2]
      * @param {Array} xs - the list
      * @return {Array}
-     * @throws Will throw an error if the list is empty.
-     *
-     * @example
-     * 
-     * init([1, 2, 3])
-     * // => [1,2]
      */
     lib.init = function init(xs) {
         var len = lib.length(xs);
@@ -228,15 +237,9 @@
     /**
      * Returns all initial segments of the argument, shortest first.
      *
-     * @category Sublists
-     * @public
+     * @example init([1,2,3]) == [ [], [1], [1,2], [1,2,3] ]
      * @param {Array} xs
-     * @return {Array.<Array>}
-     *
-     * @example
-     *
-     * inits([1, 2, 3])
-     * // => [ [], [1], [1,2], [1,2,3] ]
+     * @return {Array}
      */
     lib.inits = function inits(xs) {
         function _inits(list, acc) {
@@ -252,15 +255,10 @@
     /**
      * Test whether a list is empty.
      *
-     * @category Basic
-     * @public
+     * @example isEmpty([]) == true
+     * @example isEmpty([1]) == false
      * @param {Array} xs - the list
-     * @return {Boolean}
-     *
-     * @example
-     *
-     * isEmpty([])
-     * // => true
+     * @return {boolean}
      */
     lib.isEmpty = function isEmpty(xs) {
         return !xs || !xs.length;
@@ -269,16 +267,9 @@
     /**
      * Extract the last element of a list, which must be non-empty.
      *
-     * @category Basic
-     * @public
-     * @param {Array.<T>} xs - the list
-     * @return {T}
-     * @throws Will throw an error if the list is empty.
-     *
-     * @example
-     *
-     * last([1, 2, 3])
-     * // => 3
+     * @example last([1,2,3]) == 3
+     * @param {Array} xs - the list
+     * @return {any}
      */
     lib.last = function last(xs) {
         var len = lib.length(xs);
@@ -295,15 +286,9 @@
     /**
      * Returns the length of a finite list as an int.
      *
-     * @category Basic
-     * @public
+     * @example length([10, 11, 12]) == 3
      * @param {Array} xs - the list
-     * @return {Number}
-     *
-     * @example
-     *
-     * length([10, 11, 12])
-     * // => 33
+     * @return {int}
      */
     lib.length = function length(xs) {
         if (lib.isEmpty(xs)) { return 0; }
@@ -313,17 +298,10 @@
     /**
      * List index operator, starting from 0.
      *
-     * @category Indexing
-     * @public
-     * @param {Number} n - the index
-     * @param {Array.<T>} xs - the list
-     * @return {T}
-     * @throw Will throw an error if n exceeds the length of the list xs
-     *
-     * @example
-     *
-     * nth(1, [10, 20, 30])
-     * // => 20
+     * @example nth(1, [1,2,3]) == 2
+     * @param {int} n - the index
+     * @param {Array} xs - the list
+     * @return {any}
      */
     lib.nth = function nth(n, xs) {
         if (n > lib.length(xs)) {
@@ -338,28 +316,18 @@
 
     /**
      * map(fn, xs) is the list obtained by applying `fn` to each element of xs.
-     * The function `fn` will be curried.
+     * The function `fn` is curried by default, which allows greater flexibility.
      *
-     * @category Transformations
-     * @public
-     * @param {Function} fn - the function to apply to each element in a list
+     * @example map(function (x) { return x + 1 }, [1,2,3]) == [2,3,4]
+     * @example map(function (x, y) { return x + y; }, [1,2,3]) == [function(y) { return 1 + y; }, ...];
+     * @param {function} fn - the function to apply to each element in a list
      * @param {Array} xs - the list
      * @return {Array}
-     *
-     * @example
-     *
-     * map(x => x + 1, [1, 2, 3])
-     * // => [2,3,4]
-     *
-     * @example
-     *
-     * map(function (x, y) { return x + y; }, [1, 2])
-     * // => [ function (y) { return 1 + y }, function (y) { return 2 + y} ]
      */
     lib.map = function map(fn, xs) {
         var curriedFn = H.utils.curry(fn);
         var results = [];
-        for (var i = 0, len = lib.length(xs); i < len; i+=1) {
+        for (var i = 0, len = lib.length(xs); i &lt; len; i+=1) {
             results.push(curriedFn(xs[i]));
         }
 
@@ -368,18 +336,11 @@
 
     /**
      * Returns the maximum value from a list, which must be non-empty, finite, 
-     * and of an ordered type (able to be compared with simple operators >, <, =).
+     * and of an ordered type (able to be compared with simple operators >, &lt;, =).
      * 
-     * @category Folds
-     * @public
-     * @param {Array.<T>} xs
-     * @return {T}
-     * @throws Will throw an error if the list is empty.
-     *
-     * @example
-     *
-     * maximum([10, 20, 30])
-     * // => 30
+     * @example maximum([1,2,3]) == 3
+     * @param {Array} xs
+     * @return {any}
      */
     lib.maximum = function maximum(xs) {
         if (lib.isEmpty(xs)) {
@@ -394,25 +355,18 @@
 
         // TODO: lib.reduce
         return unc.tail.reduce(function (previous, current) {
-            if (previous < current) { return current; }
+            if (previous &lt; current) { return current; }
             return previous;
         }, unc.head);
     };
 
     /**
      * Returns the minimum value from a list, which must be non-empty, finite, 
-     * and of an ordered type (able to be compared with simple operators >, <, =).
+     * and of an ordered type (able to be compared with simple operators >, &lt;, =).
      *
-     * @category Folds
-     * @public
-     * @param {Array.<T>} xs
-     * @return {T}
-     * @throws Will throw an error if the list is empty.
-     *
-     * @example
-     *
-     * minimum([10, 20, 30])
-     * // => 10
+     * @example minimum([1, 2, 3]) == 1
+     * @param {Array} xs
+     * @return {any}
      */
     lib.minimum = function minimum(xs) {
         if (lib.isEmpty(xs)) {
@@ -435,14 +389,9 @@
     /**
      * Returns the elements of a list in reverse order. The list must be finite.
      *
-     * @category Transformations
-     * @public
+     * @example reverse([1,2,3]) == [3,2,1]
      * @param {Array} xs
      * @return {Array}
-     *
-     * @example
-     * reverse([10, 20, 30])
-     * // => [30, 20, 10]
      */
     lib.reverse = function reverse(xs) {
         return xs.slice().reverse();
@@ -453,16 +402,10 @@
      * satisfies p, and the second element of the list is the remainder of the list.
      * It is the equivalent of calling [takeWhile(p, xs), dropWhile(p, xs)].
      *
-     * @category Sublists
-     * @public
+     * @example span(function (x) { return x &lt; 3; }, [1,2,3,4,1,2,3]) == [ [1,2], [4,1,2,3] ]
      * @param {Function} p - predicate function
-     * @param {Array.<T>} xs - the list
-     * @return {Array.<Array.<T>>}
-     *
-     * @example
-     *
-     * span(x => x < 3, [1, 2, 3, 4, 1, 2, 3])
-     * // => [ [1,2], [4,1,2,3] ]
+     * @param {Array} xs - the list
+     * @return {Array}
      */
     lib.span = function span(p, xs) {
         return [lib.takeWhile(p, xs), lib.dropWhile(p, xs)];
@@ -473,15 +416,10 @@
      * second element is the remainder of the list.
      * It is equivalent to calling [take(n, xs) drop(n, xs)]
      *
-     * @category Sublists
-     * @public
-     * @param {Number} n
-     * @param {Array.<T>} xs
-     * @return {Array.<Array.<T>>}
-     *
-     * @example
-     * splitAt(3, [1, 2, 3, 4, 5])
-     * // => [ [1,2,3], [4,5] ]
+     * @example splitAt(3, [1,2,3,4,5]) == [[1,2,3], [4,5]]
+     * @param {int} n
+     * @param {Array} xs
+     * @return {Array}
      */
     lib.splitAt = function splitAt(n, xs) {
         return [lib.take(n, xs), lib.drop(n, xs)];
@@ -491,27 +429,17 @@
      * Drops the given prefix from a list. It returns null if the list does not start 
      * with the prefix or the list without the prefix if it does.
      *
-     * @category Sublists
-     * @public
-     * @param {Array} prefix - prefix list
-     * @param {Array} xs - queried list
-     * @return {?Array}
-     *
-     * @example
-     *
-     * stripPrefix([1, 2, 3], [4, 5, 6])
-     * // => null
-     *
-     * @example
-     *
-     * stripPrefix([1, 2, 3], [1, 2, 3, 4, 5, 6])
-     * //=> [4, 5, 6]
+     * @example stripPrefix([1,2,3], [4,5,6]) == null
+     * @example stripPrefix([1,2,3], [1,2,3,4,5,6]) == [4,5,6]
+     * @param {Array} prefix
+     * @param {Array} xs
+     * @return {array?}
      */
     lib.stripPrefix = function stripPrefix(prefix, xs) {
         var pLen = lib.length(prefix);
         var result = [];
 
-        for (var i = 0; i < pLen; i++) {
+        for (var i = 0; i &lt; pLen; i++) {
             // List does not begin with prefix.
             if (prefix[i] !== xs[i]) {
                 return null;
@@ -524,16 +452,9 @@
     /**
      * Extract the elements after the head of a list, which must be non-empty.
      *
-     * @category Basic
-     * @public
-     * @param {Array.<T>} xs - the list
-     * @return {Array.<T>}
-     * @throws Will throw an error if the list is empty.
-     *
-     * @example
-     *
-     * tail([1, 2, 3])
-     * // => [2, 3]
+     * @example tail([1,2,3]) == [2,3]
+     * @param {Array} xs - the list
+     * @return {Array}
      */
     lib.tail = function tail(xs) {
         var len = lib.length(xs);
@@ -550,15 +471,9 @@
     /**
      * Returns all final segments of the argument, longest first.
      *
-     * @category Sublists
-     * @public
-     * @param {Array.<T>} xs
-     * @return {Array.<Array.<T>>}
-     *
-     * @example
-     *
-     * tails([1, 2, 3])
-     * // => [ [1,2,3], [2,3], [3], [] ]
+     * @example tails([1,2,3]) == [ [1,2,3], [2,3], [3], [] ]
+     * @param {Array} xs
+     * @return {Array}
      */
     lib.tails = function tails(xs) {
         function _tails(list, acc) {
@@ -574,23 +489,13 @@
     /**
      * Returns the first `n` elements of a list `xs`, or the entire list `xs` if n > length(xs)
      *
-     * @category Sublists
-     * @public
-     * @param {Array.<T>} xs - the list
-     * @return {Array.<T>}
-     *
-     * @example
-     *
-     * take(3, [10, 20])
-     * // => [10, 20]
-     *
-     * @example
-     *
-     * take(2, [10, 20, 30])
-     * // => [10, 20]
+     * @example take(3, [1,2]) == [1,2]
+     * @example take(2, [1,2,3]) == [1,2]
+     * @param {Array} xs - the list
+     * @return {Array}
      */
     lib.take = function take(n, xs) {
-        if (n <= 0 || lib.isEmpty(xs)) {
+        if (n &lt;= 0 || lib.isEmpty(xs)) {
             return [];
         }
 
@@ -599,7 +504,7 @@
         }
 
         var result = [];
-        for (var i = 0; i < n; i++) {
+        for (var i = 0; i &lt; n; i++) {
             result.push(xs[i]);
         }
 
@@ -609,21 +514,11 @@
     /**
      * Return the longest prefix of xs of elements that satisfy predicate p.
      *
-     * @category Sublists
-     * @public
+     * @example takeWhile(function (x) { return x &lt; 3; }, [1,2,3,4,5]) == [1,2]
+     * @example takeWhile(function (x) { return x &lt; 0; }, [1,2,3,4,5]) == []
      * @param {Function} p - function returning a boolean value
-     * @param {Array.<T>} xs - the list
-     * @return {Array.<T>}
-     *
-     * @example
-     *
-     * takeWhile(x => x < 3, [1, 2, 3, 4, 5])
-     * // => [1, 2]
-     *
-     * @example
-     *
-     * takeWhile(x => x < 0, [1, 2, 3, 4, 5])
-     * // => []
+     * @param {Array} xs - the list
+     * @return {Array}
      */
     lib.takeWhile = function takeWhile(p, xs) {
         var len = lib.length(xs);
@@ -633,7 +528,7 @@
         }
 
         var results = [];
-        for (var i = 0; i < len; i+=1) {
+        for (var i = 0; i &lt; len; i+=1) {
             if (p(xs[i])) {
                 results.push(xs[i]);
             } else {
@@ -648,25 +543,25 @@
      * Decompose a list into its head and tail.
      * If the list is empty, return null. If the list is non-empty, return a an object
      * containing the head and tail.
+     * Results can be accesesd by results[0] or results.head, and results[1] or results.tail.
      *
-     * @category Basic
-     * @public
-     * @param {Array.<T>} xs - the list
-     * @return {Object.<T, Array.<T>>}
-     *
-     * @example
-     *
-     * uncons([1,2, 3])
-     * // => { head: 1, tail: [2, 3] }
+     * @example uncons([1,2,3]) == {0: 1, 1: [2,3], head: 1, tail: [2,3]}
+     * @param {Array} xs - the list
+     * @return {Array}
      */
     lib.uncons = function uncons(xs) {
         if (lib.isEmpty(xs)) {
             return null;
         }
 
+        var head = lib.head(xs);
+        var tail = lib.tail(xs);
+
         return {
-            head: lib.head(xs),
-            tail: lib.tail(xs)
+            0: head,
+            1: tail,
+            head: head,
+            tail: tail
         };
     };
 
@@ -674,16 +569,10 @@
      * Takes two lists and returns the corresponding pairs. If one input list is short,
      * excess elements of the longer list are discarded.
      *
-     * @category Zips
-     * @public
+     * @example * zip([1,2], ['a', 'b', 'c']) == [[1, 'a'], [2, 'b']]
      * @param {Array} xs - first list
      * @param {Array} ys - second list
-     * @return {Array.<Array>}
-     *
-     * @example
-     *
-     * zip([1, 2], ['a', 'b', 'c'])
-     * // => [[1, 'a'], [2, 'b']]
+     * @return {Array}
      */
     lib.zip = function zip(xs, ys) {
         return lib.zipN(xs, ys);
@@ -693,9 +582,7 @@
      * zipN is a generalized version of `zip`.
      * It zips an arbitrary amount of lists.
      *
-     * @category Zips
-     * @public
-     * @return {Array.<Array>}
+     * @return {Array}
      */
     lib.zipN = function zipN() {
         var lists = Array.prototype.slice.call(arguments);
@@ -709,7 +596,7 @@
             }, xss);
         }
 
-        for (var i = 0; i < minLen; i+=1) {
+        for (var i = 0; i &lt; minLen; i+=1) {
             results.push(_allAt(i, lists));
         }
 
@@ -723,3 +610,26 @@
     return H;
 
 }(H || {}));
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Dec 17 2015 09:42:51 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
