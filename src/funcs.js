@@ -116,12 +116,7 @@
             return [];
         }
 
-        var results = [];
-        for (var i = n; i < len; i+=1) {
-            results.push(xs[i]);
-        }
-
-        return results;
+        return xs.slice(n);
     };
 
     /**
@@ -648,7 +643,7 @@
             }
         }
 
-        return xs.slice(pLen, H.length(xs));
+        return H.drop(pLen, xs);
     };
 
     /**
