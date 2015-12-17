@@ -11,8 +11,6 @@ describe('uncons', function () {
     it('should return the correct results for a list of length 1', function () {
         var result = uncons([1]);
         expect(result).toEqual({
-            0: 1,
-            1: [],
             head: 1,
             tail: []
         });
@@ -20,8 +18,6 @@ describe('uncons', function () {
 
     it('should return correct results for a list of length >1', function () {
         expect(uncons([1,2,3])).toEqual({
-            0: 1,
-            1: [2,3],
             head: 1,
             tail: [2,3]
         });
