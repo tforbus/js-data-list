@@ -26,6 +26,7 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - takeWhile
 - dropWhile
 - dropWhileEnd
+- group
 - span
 - break as breakList
 - (!!) as nth
@@ -56,7 +57,6 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - replicate
 - cycle
 - unfoldr
-- group
 - isPrefixOf
 - isSuffixOf
 - isInfixOf

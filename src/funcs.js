@@ -114,6 +114,42 @@
     };
 
     /**
+     * Takes a list and returns a list of lists such that the concatenation of the result
+     * is equal to the argument. Moreover, each sublist in the result contains only equal 
+     * elements.
+     *
+     * @example group([1,1,1,2,2,3,1]) == [ [1,1,1], [2,2], [3], [1] ]
+     * @param {array} xs
+     * @return {array}
+     */
+    lib.group = function group(xs) {
+        function _group(list, acc, accIndex) {
+            if (lib.isEmpty(list)) {
+                return acc;
+            }
+
+            var unc = lib.uncons(list);
+            if (lib.isEmpty(acc)) {
+                acc.push([unc.head]);
+            }
+            
+            else if (acc[accIndex][0] === unc.head){
+                acc[accIndex].push(unc.head);
+            }
+
+            else {
+                accIndex+=1;
+                acc[accIndex] = [];
+                acc[accIndex].push(unc.head);
+            }
+
+            return _group(unc.tail, acc, accIndex);
+        }
+
+        return _group(xs, [], 0);
+    };
+
+    /**
      * Returns all the elements of a list except the last one. The list must be non-empty.
      *
      * @example init([1,2,3]) == [1,2]
