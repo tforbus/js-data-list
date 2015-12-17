@@ -35,6 +35,9 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - elem as isElem
 - notElem as isNotElem
 - lookup
+- find
+- filter
+- partition
 
 ## Todo
 - intersperse
@@ -64,9 +67,6 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - isSuffixOf
 - isInfixOf
 - isSubsequenceOf
-- find
-- filter
-- partition
 - elemIndex
 - elemIndices
 - findIndex

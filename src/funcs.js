@@ -100,8 +100,7 @@
      * // => [ [1,2,3], [4,1,2] ]
      */
     H.breakList = function breakList(p, xs) {
-        var not = utils.not(p);
-        return H.span(not, xs);
+        return H.span(utils.not(p), xs);
     };
 
     /**
