@@ -16,6 +16,22 @@
     };
 
     /**
+     * Returns a an array of arrays xss, where the first element of xss is the longest 
+     * prefix of xs elements that do not satisfy p, and the second element is the remainder 
+     * of the list xs.
+     * It is the equivalent of span (not p, xs)
+     * 
+     * @example breakList(function (x) { return x > 3; }, [1,2,3,4,1,2]) == [ [1,2,3], [4,1,2] ]
+     */
+    lib.breakList = function breakList(p, xs) {
+        var not = H.utils.curry(function (p, x) {
+            return !p(x);
+        });
+
+        return lib.span(not(p), xs);
+    };
+
+    /**
      * Returns the suffix of xs after the first n elements, or [] if n > length xs.
      * 
      * @example drop(3, [1,2,3,4]) == [4]
@@ -56,12 +72,25 @@
         var list = xs.slice();
         var isDropped = p(list[0]);
 
-        while(isDropped) {
+        while(isDropped && lib.length(list)) {
             list.shift();
             isDropped = p(list[0]);
         }
 
         return list;
+    };
+
+    /**
+     * Drops the largest suffix of a list in which the predicate holds for all elements.
+     *
+     * @example dropWhileEnd(function (x) { x < 3; }, [1,2,3,2,1]) == [1,2,3]
+     * @param {Function} p - predicate function
+     * @param {array} xs - the list
+     * @return {array}
+     */
+    lib.dropWhileEnd = function dropWhileEnd(p, xs) {
+        var list = lib.reverse(xs);
+        return lib.reverse(lib.dropWhile(p, list));
     };
 
     /**
@@ -250,6 +279,20 @@
      */
     lib.reverse = function reverse(xs) {
         return xs.slice().reverse();
+    };
+
+    /**
+     * Returns a list of lists where the first element is the longest prefix of xs that 
+     * satisfies p, and the second element of the list is the remainder of the list.
+     * It is the equivalent of calling [takeWhile(p, xs), dropWhile(p, xs)].
+     *
+     * @example span(function (x) { return x < 3; }, [1,2,3,4,1,2,3]) == [ [1,2], [4,1,2,3] ]
+     * @param {Function} p - predicate function
+     * @param {array} xs - the list
+     * @return {array}
+     */
+    lib.span = function span(p, xs) {
+        return [lib.takeWhile(p, xs), lib.dropWhile(p, xs)];
     };
 
     /**
