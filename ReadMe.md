@@ -1,7 +1,8 @@
 # H.js
 This library will be a JavaScript port of Haskell's Data.list.
 Each function will be able to be partially applied, just like in Haskell.
-Each function might be able to handle infinite lists, but that's a stretch goal.
+
+Eventually some functions may be able to handle infinite lists, but that is a stretch goal.
 
 ## Implemented
 - (++) as append
@@ -19,6 +20,7 @@ Each function might be able to handle infinite lists, but that's a stretch goal.
 - take
 - drop
 - splitAt
+- stripPrefix
 - takeWhile
 - dropWhile
 - dropWhileEnd
@@ -52,7 +54,6 @@ Each function might be able to handle infinite lists, but that's a stretch goal.
 - replicate
 - cycle
 - unfoldr
-- stripPrefix
 - group
 - inits
 - tails

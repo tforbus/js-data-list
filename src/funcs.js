@@ -140,6 +140,24 @@
     };
 
     /**
+     * Returns all initial segments of the argument, shortest first.
+     *
+     * @example init([1,2,3]) == [ [], [1], [1,2], [1,2,3] ]
+     * @param {array} xs
+     * @return {array}
+     */
+    lib.inits = function inits(xs) {
+        function _inits(list, acc) {
+            acc.unshift(list);
+            if (lib.isEmpty(list)) {
+                return acc;
+            }
+            return _inits(lib.init(list), acc);
+        }
+        return _inits(xs, []);
+    };
+
+    /**
      * Test whether a list is empty.
      *
      * @example isEmpty([]) == true
@@ -313,6 +331,30 @@
     };
 
     /**
+     * Drops the given prefix from a list. It returns null if the list does not start 
+     * with the prefix or the list without the prefix if it does.
+     *
+     * @example stripPrefix([1,2,3], [4,5,6]) == null
+     * @example stripPrefix([1,2,3], [1,2,3,4,5,6]) == [4,5,6]
+     * @param {array} prefix
+     * @param {array} xs
+     * @return {array?}
+     */
+    lib.stripPrefix = function stripPrefix(prefix, xs) {
+        var pLen = lib.length(prefix);
+        var result = [];
+
+        for (var i = 0; i < pLen; i++) {
+            // List does not begin with prefix.
+            if (prefix[i] !== xs[i]) {
+                return null;
+            }
+        }
+
+        return xs.slice(pLen, lib.length(xs));
+    };
+
+    /**
      * Extract the elements after the head of a list, which must be non-empty.
      *
      * @example tail([1,2,3]) == [2,3]
@@ -329,6 +371,24 @@
         }
 
         return xs.slice(1);
+    };
+
+    /**
+     * Returns all final segments of the argument, longest first.
+     *
+     * @example tails([1,2,3]) == [ [1,2,3], [2,3], [3], [] ]
+     * @param {array} xs
+     * @return {array}
+     */
+    lib.tails = function tails(xs) {
+        function _tails(list, acc) {
+            acc.push(list);
+            if (lib.isEmpty(list)) {
+                return acc;
+            }
+            return _tails(lib.tail(list), acc);
+        }
+        return _tails(xs, []);
     };
 
     /**
