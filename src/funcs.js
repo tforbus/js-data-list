@@ -498,7 +498,7 @@
      * @example
      *
      * length([10, 11, 12])
-     * // => 33
+     * // => 3
      */
     H.length = function length(xs) {
         if (H.isEmpty(xs)) { return 0; }
