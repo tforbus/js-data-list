@@ -45,6 +45,8 @@
          * Curries a function.
          * @private
          * @memberof utils
+         * @param {Function} fn
+         * @return {Function}
          */
         curry: function curry (fn) {
             var arity = fn.length;
@@ -61,12 +63,19 @@
         },
 
         /**
-         * Creates an array of length `size` full of 0s.
+         * Supplied with a predicate function p, return a function that will inverse
+         * the results of p(x)
          * @private
          * @memberof utils
+         * @param {Function} p - predicate function
+         * @return {Function}
          */
-        zeroArray: function (size) {
-            return new Array(size + 1).join(0).split('').map(parseFloat);
+        not: function (p) {
+            var curried = utils.curry(function (p, x) {
+                return !p(x);
+            });
+
+            return curried(p);
         }
     };
 
@@ -108,11 +117,27 @@
      * // => [ [1,2,3], [4,1,2] ]
      */
     H.breakList = function breakList(p, xs) {
-        var not = utils.curry(function (p, x) {
-            return !p(x);
-        });
+        return H.span(utils.not(p), xs);
+    };
 
-        return H.span(not(p), xs);
+    /**
+     * Concatenates a list of lists.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Array.&lt;Array.&lt;T>>} xss - list of lists
+     * @return {Array&lt;T>}
+     *
+     * @example
+     *
+     * concat([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ])
+     * // => [1, 2, 3, 4, 5, 6, 7, 8, 9]
+     */
+    H.concat = function concat(xss) {
+        if (H.isEmpty(xss)) { return []; }
+        var unc = H.uncons(xss);
+        return H.append(unc.head, H.concat(unc.tail));
     };
 
     /**
@@ -140,12 +165,7 @@
             return [];
         }
 
-        var results = [];
-        for (var i = n; i &lt; len; i+=1) {
-            results.push(xs[i]);
-        }
-
-        return results;
+        return xs.slice(n);
     };
 
     /**
@@ -164,18 +184,10 @@
      * // => [3,4,5]
      */
     H.dropWhile = function dropWhile(p, xs) {
-        var len = H.length(xs);
-        if (len === 0) { return []; }
-
-        var list = xs.slice();
-        var isDropped = p(list[0]);
-
-        while(isDropped &amp;&amp; H.length(list)) {
-            list.shift();
-            isDropped = p(list[0]);
+        if (H.isEmpty(xs) || !p(H.head(xs))) {
+            return xs;
         }
-
-        return list;
+        return dropWhile(p, H.tail(xs));
     };
 
     /**
@@ -196,6 +208,62 @@
     H.dropWhileEnd = function dropWhileEnd(p, xs) {
         var list = H.reverse(xs);
         return H.reverse(H.dropWhile(p, list));
+    };
+
+    /**
+     * Return the elements in xs which satisfy predicate p.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {Function} p - the predicate
+     * @param {Array} xs - the list
+     * @return {Array}
+     *
+     * @example
+     * filter(x => x % 2 == 1, [1, 2, 3, 4, 5])
+     * // => [1, 3, 5]
+     */
+    H.filter = function filter(p, xs) {
+        function _filter(p, xs, acc) {
+            if (H.isEmpty(xs)) {
+                return acc;
+            }
+
+            var unc = H.uncons(xs);
+            var appended = p(unc.head) ? H.append(acc, [unc.head]) : acc;
+            return _filter(p, unc.tail, appended);
+        }
+
+        return _filter(p, xs, []);
+    };
+
+    /**
+     * Return the first element in a list xs which matches predicate p.
+     * Return null if the element does not exist.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {Function} p - the predicate function
+     * @param {Array.&lt;T>} xs - the list
+     * @return {?T}
+     *
+     * @example
+     * find(x => x > 4, [1, 2, 3, 4, 5, 6])
+     * // => 5
+     */
+    H.find = function find(p, xs) {
+        if (H.isEmpty(xs)) {
+            return null;
+        }
+
+        var unc = H.uncons(xs);
+        if (p(unc.head)) {
+            return unc.head;
+        }
+
+        return find(p, unc.tail);
     };
 
     /**
@@ -250,7 +318,7 @@
                 acc.push([unc.head]);
             }
             
-            else if (acc[accIndex][0] === unc.head){
+            else if (H.head(acc[accIndex]) === unc.head){
                 acc[accIndex].push(unc.head);
             }
 
@@ -326,6 +394,63 @@
     };
 
     /**
+     * Inserts the list xs between the lists within xss and concatenates the result.
+     *
+     * @category Transformations
+     * @public
+     * @memberof H
+     * @param {Array} xs - list to insert
+     * @param {Array.&lt;Array>} xss - list of lists
+     * @return {Array}
+     *
+     * @example
+     * intercalate([0, 0], [ [1, 2], [3, 4], [5] ])
+     * // => [1, 2, 0, 0, 3, 4, 0, 0, 5]
+     */
+    H.intercalate = function intercalate(xs, xss) {
+        return H.concat(H.intersperse(xs, xss));
+    };
+
+    /**
+     * Inserts x between each element of xs.
+     *
+     * @category Transformations
+     * @public
+     * @memberof H
+     * @param {*} x - element to intersperse
+     * @param {Array} xs - list
+     * @return {Array}
+     * 
+     * @example
+     * 
+     * intersperse(0, [1, 2, 3])
+     * // => [1, 0, 2, 0, 3, 0]
+     */
+    H.intersperse = function intersperse(x, xs) {
+        if (H.length(xs) &lt;= 1) { return xs; }
+        return H.append([H.head(xs), x], H.intersperse(x, H.tail(xs)));
+    };
+
+    /**
+     * List membership predicate. Returns if the element exists in the list.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {T} x - the element to check for
+     * @param {Array.&lt;T>} xs - the list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * isElem(1, [1, 2, 3])
+     * // => true
+     */
+    H.isElem = function isElem(x, xs) {
+        return xs.indexOf(x) >= 0;
+    };
+
+    /**
      * Test whether a list is empty.
      *
      * @category Basic
@@ -341,6 +466,25 @@
      */
     H.isEmpty = function isEmpty(xs) {
         return !xs || !xs.length;
+    };
+
+    /**
+     * The negation of `isElem`.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {T} x - the element to check for
+     * @param {Array.&lt;T>} xs - the list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * isElem(1, [1, 2, 3])
+     * // => false
+     */
+    H.isNotElem = function isNotElem(x, xs) {
+        return !H.isElem(x, xs);
     };
 
     /**
@@ -387,6 +531,35 @@
     H.length = function length(xs) {
         if (H.isEmpty(xs)) { return 0; }
         return xs.length;
+    };
+
+    /**
+     * Looks up a key in an object.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {String} key - object property
+     * @param {Object} hash
+     * @return {Object.&lt;T>?}
+     *
+     * @example
+     *
+     * lookup('foo', { foo: 1, bar: 2 })
+     * // => 1
+     *
+     * @example
+     *
+     * lookup('foo', { bar: 2, baz: 3 })
+     * // => undefined
+     */
+    H.lookup = function lookup(key, hash) {
+        var keys = Object.keys(hash);
+        if (H.isElem(key, keys)) {
+            return hash[key];
+        }
+
+        return undefined;
     };
 
     /**
@@ -439,12 +612,16 @@
      */
     H.map = function map(fn, xs) {
         var curriedFn = utils.curry(fn);
-        var results = [];
-        for (var i = 0, len = H.length(xs); i &lt; len; i+=1) {
-            results.push(curriedFn(xs[i]));
+        function _map(f, xs, acc) {
+            if (H.isEmpty(xs)) {
+                return acc;
+            }
+
+            var unc = H.uncons(xs);
+            return _map(f, unc.tail, H.append(acc, [f(unc.head)]));
         }
 
-        return results;
+        return _map(curriedFn, xs, []);
     };
 
     /**
@@ -513,6 +690,27 @@
             if (previous > current) { return current; }
             return previous;
         }, unc.head);
+    };
+
+    /**
+     * Returns a pair of lists, where the first list is a list containing elements from
+     * xs which satisfy predicate p, and the second list contains elements from xs which do
+     * not satisfy p.
+     *
+     * @category Searching
+     * @public
+     * @memberof H
+     * @param {Function} p - the predicate
+     * @param {Array} xs - the list
+     * @return {Array.&lt;Array>}
+     *
+     * @example
+     *
+     * partition(x => x > 3, [1, 2, 3, 4, 5])
+     * // => [ [4, 5], [1, 2, 3] ]
+     */
+    H.partition = function partition(p, xs) {
+        return [ H.filter(p, xs), H.filter(utils.not(p), xs) ];
     };
 
     /**
@@ -595,17 +793,19 @@
      * //=> [4, 5, 6]
      */
     H.stripPrefix = function stripPrefix(prefix, xs) {
-        var pLen = H.length(prefix);
-        var result = [];
-
-        for (var i = 0; i &lt; pLen; i++) {
-            // List does not begin with prefix.
-            if (prefix[i] !== xs[i]) {
-                return null;
-            }
+        if (H.length(prefix) > H.length(xs)) {
+            return null;
         }
 
-        return xs.slice(pLen, H.length(xs));
+        if (H.isEmpty(prefix)) {
+            return xs;
+        }
+
+        if (H.head(prefix) !== H.head(xs)) {
+            return null;
+        }
+
+        return stripPrefix(H.tail(prefix), H.tail(xs));
     };
 
     /**
@@ -688,12 +888,7 @@
             return xs;
         }
 
-        var result = [];
-        for (var i = 0; i &lt; n; i++) {
-            result.push(xs[i]);
-        }
-
-        return result;
+        return xs.slice(0, n);
     };
 
     /**
@@ -717,22 +912,11 @@
      * // => []
      */
     H.takeWhile = function takeWhile(p, xs) {
-        var len = H.length(xs);
-
-        if (len === 0) {
+        if (H.isEmpty(xs) || !p(H.head(xs))) {
             return [];
         }
 
-        var results = [];
-        for (var i = 0; i &lt; len; i+=1) {
-            if (p(xs[i])) {
-                results.push(xs[i]);
-            } else {
-                break;
-            }
-        }
-
-        return results;
+        return H.append([H.head(xs)], takeWhile(p, H.tail(xs)));
     };
 
     /**
@@ -794,7 +978,6 @@
     H.zipN = function zipN() {
         var lists = Array.prototype.slice.call(arguments);
         var minLen = H.minimum(H.map(function (xs) { return H.length(xs); }, lists));
-        var results = [];
 
         // Get the nth element for all lists in a list.
         function _allAt(n, xss) {
@@ -803,11 +986,17 @@
             }, xss);
         }
 
-        for (var i = 0; i &lt; minLen; i+=1) {
-            results.push(_allAt(i, lists));
+        function _zipN(allLists, acc, currentN, maxN) {
+            if (currentN >= maxN) {
+                return acc;
+            }
+
+            var allAtCurrent = _allAt(currentN, allLists);
+            var appended = H.append(acc, [allAtCurrent]);
+            return _zipN(allLists, appended, currentN+1, maxN);
         }
 
-        return results;
+        return _zipN(lists, [], 0, minLen);
     };
 
 
@@ -837,7 +1026,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Dec 17 2015 11:15:05 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Dec 17 2015 16:51:42 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>
