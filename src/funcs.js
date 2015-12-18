@@ -290,7 +290,7 @@
                 acc.push([unc.head]);
             }
             
-            else if (acc[accIndex][0] === unc.head){
+            else if (H.head(acc[accIndex]) === unc.head){
                 acc[accIndex].push(unc.head);
             }
 
