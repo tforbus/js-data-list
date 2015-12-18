@@ -35,17 +35,6 @@
         },
 
         /**
-         * Creates an array of length `size` full of 0s.
-         * @private
-         * @memberof utils
-         * @param {Number} size
-         * @return {Array}
-         */
-        zeroArray: function (size) {
-            return new Array(size + 1).join(0).split('').map(parseFloat);
-        },
-
-        /**
          * Supplied with a predicate function p, return a function that will inverse
          * the results of p(x)
          * @private
@@ -374,6 +363,44 @@
             return _inits(H.init(list), acc);
         }
         return _inits(xs, []);
+    };
+
+    /**
+     * Inserts the list xs between the lists within xss and concatenates the result.
+     *
+     * @category Transformations
+     * @public
+     * @memberof H
+     * @param {Array} xs - list to insert
+     * @param {Array.<Array>} xss - list of lists
+     * @return {Array}
+     *
+     * @example
+     * intercalate([0, 0], [ [1, 2], [3, 4], [5] ])
+     * // => [1, 2, 0, 0, 3, 4, 0, 0, 5]
+     */
+    H.intercalate = function intercalate(xs, xss) {
+        return H.concat(H.intersperse(xs, xss));
+    };
+
+    /**
+     * Inserts x between each element of xs.
+     *
+     * @category Transformations
+     * @public
+     * @memberof H
+     * @param {*} x - element to intersperse
+     * @param {Array} xs - list
+     * @return {Array}
+     * 
+     * @example
+     * 
+     * intersperse(0, [1, 2, 3])
+     * // => [1, 0, 2, 0, 3, 0]
+     */
+    H.intersperse = function intersperse(x, xs) {
+        if (H.length(xs) <= 1) { return xs; }
+        return H.append([H.head(xs), x], H.intersperse(x, H.tail(xs)));
     };
 
     /**
