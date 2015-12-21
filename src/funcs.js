@@ -803,6 +803,42 @@
     };
 
     /**
+     * Returns the list of all subsequences of the argument (the powerset).
+     *
+     * @category Sublists
+     * @public
+     * @memberof H
+     * @param {Array.<T>} xs - the list
+     * @return {Array.Array.<T>}
+     *
+     * @example
+     * subsequences([1,2,3])
+     * // => [ [], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3] ]
+     */
+    H.subsequences = function subsequences(xs) {
+        var len = H.length(xs);
+
+        // Handle initial empty length case.
+        if (len === 0) {
+            return [ [] ];
+        }
+
+        if (len === 1) {
+            return [ [], [H.head(xs)] ];
+        }
+
+        function _appendToEach(x, xss) {
+            return H.map(function (xs) {
+                return H.append([x], xs);
+            }, xss);
+        }
+
+        var sequences = subsequences(H.init(xs));
+        var appended = _appendToEach(H.last(xs), sequences);
+        return H.append(sequences, appended);
+    };
+
+    /**
      * Extract the elements after the head of a list, which must be non-empty.
      *
      * @category Basic
