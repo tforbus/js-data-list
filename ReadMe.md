@@ -38,10 +38,10 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - find
 - filter
 - partition
-
-## Todo
 - intersperse
 - intercalate
+
+## Todo
 - transpose
 - subsequences
 - permutations

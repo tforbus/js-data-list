@@ -239,6 +239,28 @@
     };
 
     /**
+     * Right-associative fold of a list.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Function} f - function to apply
+     * @param {*} z - initial value
+     * @param {Array} xs - list
+     * @return {*}
+     *
+     * @example
+     * // (2 / (3 / (1 / 4)))
+     * foldr(x y => x / y, 1, [2, 3, 4])
+     * // => 2.666
+     */
+    H.foldr = function foldr(f, z, xs) {
+        if (H.isEmpty(xs)) { return z; }
+        var unc = H.uncons(xs);
+        return f(unc.head, (foldr(f, z, unc.tail)));
+    };
+
+    /**
      * Extract the first element of a list, which must be non-empty.
      *
      * @category Basic
