@@ -40,10 +40,10 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - partition
 - intersperse
 - intercalate
+- subsequences
 
 ## Todo
 - transpose
-- subsequences
 - permutations
 - foldl
 - foldr
