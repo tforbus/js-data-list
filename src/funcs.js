@@ -268,6 +268,29 @@
     };
 
     /**
+     * Left-associative fold of a list.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Function} f - function to apply
+     * @param {*} z - initial value
+     * @param {Array} xs - list
+     * @return {*}
+     *
+     * @example
+     *
+     * // (1 - 1) - 2 - 3 - 4
+     * foldl(x y => x - y, 1, [2,3,4])
+     * // => -5
+     */
+    H.foldl = function foldl(f, z, xs) {
+        if (H.isEmpty(xs)) { return z; }
+        var unc = H.uncons(xs);
+        return foldl(f, f(z, unc.head), unc.tail);
+    };
+
+    /**
      * Right-associative fold of a list.
      *
      * @category Folds
@@ -279,6 +302,7 @@
      * @return {*}
      *
      * @example
+     *
      * // (2 / (3 / (1 / 4)))
      * foldr(x y => x / y, 1, [2, 3, 4])
      * // => 2.666

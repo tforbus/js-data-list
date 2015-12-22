@@ -44,9 +44,9 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - permutations
 - transpose
 - foldr
+- foldl
 
 ## Todo
-- foldl
 - concatMap
 - and
 - or
