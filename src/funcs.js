@@ -218,7 +218,7 @@
             }
 
             var unc = H.uncons(xs);
-            var appended = p(unc.head) ? H.append(acc, [unc.head]) : acc;
+            var appended = p(unc.head) ? utils.snoc(unc.head, acc) : acc;
             return _filter(p, unc.tail, appended);
         }
 
