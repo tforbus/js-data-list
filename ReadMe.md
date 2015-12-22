@@ -43,10 +43,10 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - subsequences
 - permutations
 - transpose
+- foldr
 
 ## Todo
 - foldl
-- foldr
 - concatMap
 - and
 - or

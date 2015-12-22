@@ -660,11 +660,10 @@
 
         var unc = H.uncons(xs);
 
-        // TODO: H.reduce
-        return unc.tail.reduce(function (previous, current) {
+        return H.foldr(function (previous, current) {
             if (previous < current) { return current; }
             return previous;
-        }, unc.head);
+        }, unc.head, unc.tail);
     };
 
     /**
@@ -694,11 +693,10 @@
 
         var unc = H.uncons(xs);
 
-        // TODO: H.reduce
-        return unc.tail.reduce(function (previous, current) {
+        return H.foldr(function (previous, current) {
             if (previous > current) { return current; }
             return previous;
-        }, unc.head);
+        }, unc.head, unc.tail);
     };
 
     /**
