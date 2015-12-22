@@ -81,6 +81,81 @@
     };
 
     /**
+     * Determines if all elements satisfy predicate p.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Function} p - predicate function
+     * @param {Array} xs - list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * any(x => x > 0, [1,2,3])
+     * // => true
+     */
+    H.all = function all(p, xs) {
+        return H.and(H.map(function (x) { return p(x); }, xs));
+    };
+
+    /**
+     * Determines if any elements satisfy predicate p.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Function} p - predicate function
+     * @param {Array} xs - list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * any(x => x > 3, [1,2,3])
+     * // => false
+     */
+    H.any = function any(p, xs) {
+        return H.or(H.map(function (x) { return p(x); }, xs));
+    };
+
+    /**
+     * Returns the conjuction of a container of booleans.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Array} xs
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * and([true, true, false])
+     * // => false
+     */
+    H.and = function and(xs) {
+        return H.foldr(function (x, y) { return x && y; }, true, xs);
+    };
+
+    /**
+     * Determines if any elements satisfy predicate p.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Function} p - predicate function
+     * @param {Array} xs - list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * any(x => x > 3, [1,2,3])
+     * // => false
+     */
+    H.any = function any(p, xs) {
+        return H.or(H.map(function (x) { return p(x); }, xs));
+    };
+
+    /**
      * Append two lists.
      *
      * @category Basic
@@ -735,6 +810,24 @@
     };
 
     /**
+     * Returns the disjuction of a container of booleans.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Array} xs
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * or([true, true, false])
+     * // => true
+     */
+    H.or = function or(xs) {
+        return H.foldr(function (x, y) { return x || y; }, false, xs);
+    };
+
+    /**
      * Returns a pair of lists, where the first list is a list containing elements from
      * xs which satisfy predicate p, and the second list contains elements from xs which do
      * not satisfy p.
@@ -793,6 +886,24 @@
         var head = H.head(xs);
         var rest = permutations(H.tail(xs));
         return _insertInEachAll(head, rest);
+    };
+
+    /**
+     * Returns the product of all elements in the list.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Array} xs - list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * sum([2,3,4])
+     * // => 24
+     */
+    H.product = function product(xs) {
+        return H.foldr(function (x, y) { return x * y; }, 1, xs);
     };
 
     /**
@@ -930,6 +1041,24 @@
         var sequences = subsequences(H.init(xs));
         var appended = _appendToEach(H.last(xs), sequences);
         return H.append(sequences, appended);
+    };
+
+    /**
+     * Returns the sum of all elements in the list.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Array} xs - list
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * sum([1,2,3])
+     * // => 6
+     */
+    H.sum = function sum(xs) {
+        return H.foldr(function (x, y) { return x + y; }, 0, xs);
     };
 
     /**
