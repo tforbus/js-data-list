@@ -48,6 +48,21 @@
             });
 
             return curried(p);
+        },
+
+        /**
+         * The inverse of lisp's `cons` operator.
+         * Append element x at the end of xs.
+         * @private
+         * @memberof utils
+         * @param {*} x
+         * @param {Array} xs
+         * @return {Array}
+         */
+        snoc: function (x, xs) {
+            var list = [].concat(xs);
+            list.push(x);
+            return list;
         }
     };
 
@@ -708,6 +723,46 @@
     };
 
     /**
+     * Returns a list of all permutations of a provided list.
+     *
+     * @category Transformations
+     * @public
+     * @memberof H
+     * @param {Array.<T>} xs
+     * @return {Array.Array.<T>}
+     *
+     * @example
+     *
+     * permutations([1,2,3])
+     *  // => [ [1,2,3], [2,1,3], [3,2,1], [2,3,1], [3,1,2], [1,3,2] ]
+     */
+    H.permutations = function permutations(xs) {
+        var len = H.length(xs);
+        if (len === 0) { return utils.snoc([], []); }
+        if (len === 1) { return utils.snoc(xs, []); }
+
+        // Insert an element at each index in xs.
+        // (0, [1,2]) = [0,1,2], [1,0,2], [1,2,0]
+        function _insertInEach(x, xs, n, acc) {
+            if (n > H.length(xs)) { return acc; }
+            var split = H.splitAt(n, xs);
+            var result = H.append(utils.snoc(x, split[0]), split[1]);
+            return _insertInEach(x, xs, n + 1, utils.snoc(result, acc));
+        }
+
+        function _insertInEachAll(x, xss) {
+            // TODO: concatmap
+            return H.concat(H.map(function (xs) {
+                return _insertInEach(x, xs, 0, []);
+            }, xss));
+        }
+
+        var head = H.head(xs);
+        var rest = permutations(H.tail(xs));
+        return _insertInEachAll(head, rest);
+    };
+
+    /**
      * Returns the elements of a list in reverse order. The list must be finite.
      *
      * @category Transformations
@@ -805,13 +860,19 @@
     /**
      * Returns the list of all subsequences of the argument (the powerset).
      *
-     * @category Sublists
+     * @category Transformations
      * @public
      * @memberof H
      * @param {Array.<T>} xs - the list
      * @return {Array.Array.<T>}
      *
      * @example
+     *
+     * subsequences([1])
+     * // => [ [], [1] ]
+     *
+     * @example
+     *
      * subsequences([1,2,3])
      * // => [ [], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3] ]
      */

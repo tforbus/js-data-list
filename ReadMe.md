@@ -41,10 +41,10 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - intersperse
 - intercalate
 - subsequences
+- permutations
 
 ## Todo
 - transpose
-- permutations
 - foldl
 - foldr
 - concatMap
