@@ -951,11 +951,10 @@
      */
     H.tails = function tails(xs) {
         function _tails(list, acc) {
-            acc.push(list);
             if (H.isEmpty(list)) {
-                return acc;
+                return utils.snoc(list, acc);
             }
-            return _tails(H.tail(list), acc);
+            return _tails(H.tail(list), utils.snoc(list, acc));
         }
         return _tails(xs, []);
     };
