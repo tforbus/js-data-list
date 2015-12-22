@@ -42,9 +42,9 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - intercalate
 - subsequences
 - permutations
+- transpose
 
 ## Todo
-- transpose
 - foldl
 - foldr
 - concatMap

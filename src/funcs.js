@@ -1011,6 +1011,43 @@
     };
 
     /**
+     * Transposes rows and columns of the arguments.
+     *
+     * @category Transformations
+     * @public
+     * @memberof H
+     * @param {Array.Array.<T>} xss
+     * @return {Array.Array.<T>}
+     *
+     * @example
+     *
+     * transpose([ [10,11], [20], [], [30,31,32] ])
+     * // => [ [10,20,30], [11,31], [32] ]
+     */
+    H.transpose = function transpose(xss) {
+        var maxLen = H.maximum(H.map(function (xs) { return H.length(xs); }, xss));
+
+        // Get each element at the nth index of each list.
+        // Filter out the undefined values.
+        function _getEach(n, xss) {
+            var isDefined = function (x) { return x !== undefined; };
+            return H.filter(isDefined, H.map(function (xs) {
+                if (n < H.length(xs)) {
+                    return H.nth(n, xs);
+                }
+            }, xss));
+        }
+
+        function _transpose(xss, n, max, acc) {
+            if (n >= max) { return acc; }
+            var nth = _getEach(n, xss);
+            return _transpose(xss, n + 1, max, utils.snoc(nth, acc));
+        }
+
+        return _transpose(xss, 0, maxLen, []);
+    };
+
+    /**
      * Decompose a list into its head and tail.
      * If the list is empty, return null. If the list is non-empty, return a an object
      * containing the head and tail.
