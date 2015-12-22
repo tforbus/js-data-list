@@ -51,8 +51,22 @@
         },
 
         /**
+         * Prepend element x to xs.
+         * @private
+         * @memberof utils
+         * @param {*} x
+         * @param {Array} xs
+         * @return {Array}
+         */
+        cons: function (x, xs) {
+            var list = xs.slice();
+            list.unshift(x);
+            return list;
+        },
+
+        /**
          * The inverse of lisp's `cons` operator.
-         * Append element x at the end of xs.
+         * Append element x to xs.
          * @private
          * @memberof utils
          * @param {*} x
@@ -393,11 +407,8 @@
      */
     H.inits = function inits(xs) {
         function _inits(list, acc) {
-            acc.unshift(list);
-            if (H.isEmpty(list)) {
-                return acc;
-            }
-            return _inits(H.init(list), acc);
+            if (H.isEmpty(list)) { return utils.cons(list, acc); }
+            return _inits(H.init(list), utils.cons(list, acc));
         }
         return _inits(xs, []);
     };
