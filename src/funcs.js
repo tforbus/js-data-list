@@ -934,11 +934,38 @@
      * @return {Array}
      *
      * @example
+     *
      * reverse([10, 20, 30])
      * // => [30, 20, 10]
      */
     H.reverse = function reverse(xs) {
         return xs.slice().reverse();
+    };
+
+    /**
+     * Returns a list of successive reduced values from the left.
+     *
+     * @category Scans
+     * @public
+     * @mbmerof H
+     * @param {Function} f - function to build with
+     * @param {*} z - initial value
+     * @param {Array} xs - list
+     * @return {Array}
+     *
+     * @example
+     * 
+     * scanl(x y => x / y, 64, [4, 2, 4])
+     * // => [64, 16, 8, 2]
+     */
+    H.scanl = function scanl(f, z, xs) {
+        function _scanl(f, z, xs, acc) {
+            if (H.isEmpty(xs)) { return acc; }
+            var unc = H.uncons(xs);
+            var result = f(z, unc.head);
+            return _scanl(f, result, unc.tail, utils.snoc(result, acc));
+        }
+        return _scanl(f, z, xs, [z]);
     };
 
     /**
