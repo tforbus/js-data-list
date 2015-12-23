@@ -45,15 +45,15 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - transpose
 - foldr
 - foldl
-
-## Todo
-- concatMap
 - and
 - or
 - any
 - all
 - sum
 - product
+
+## Todo
+- concatMap
 - scanl
 - scanr
 - mapAccumL
