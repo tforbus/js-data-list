@@ -133,7 +133,7 @@
      * // => false
      */
     H.and = function and(xs) {
-        return H.foldr(function (x, y) { return x && y; }, true, xs);
+        return H.foldr(function (x, y) { return !!x && !!y; }, true, xs);
     };
 
     /**
@@ -824,7 +824,7 @@
      * // => true
      */
     H.or = function or(xs) {
-        return H.foldr(function (x, y) { return x || y; }, false, xs);
+        return H.foldr(function (x, y) { return !!x || !!y; }, false, xs);
     };
 
     /**
