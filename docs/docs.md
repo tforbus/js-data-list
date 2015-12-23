@@ -14,7 +14,7 @@ Determines if all elements satisfy predicate p.
 **Examples**
 
 ```javascript
-any(x => x > 0, [1,2,3])
+all(x => x > 0, [1,2,3])
 // => true
 ```
 
@@ -32,24 +32,6 @@ Returns the conjuction of a container of booleans.
 
 ```javascript
 and([true, true, false])
-// => false
-```
-
-Returns **Boolean** 
-
-## any
-
-Determines if any elements satisfy predicate p.
-
-**Parameters**
-
--   `p` **Function** predicate function
--   `xs` **Array** list
-
-**Examples**
-
-```javascript
-any(x => x > 3, [1,2,3])
 // => false
 ```
 

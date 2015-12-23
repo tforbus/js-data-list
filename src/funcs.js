@@ -92,30 +92,11 @@
      *
      * @example
      *
-     * any(x => x > 0, [1,2,3])
+     * all(x => x > 0, [1,2,3])
      * // => true
      */
     H.all = function all(p, xs) {
         return H.and(H.map(function (x) { return p(x); }, xs));
-    };
-
-    /**
-     * Determines if any elements satisfy predicate p.
-     *
-     * @category Folds
-     * @public
-     * @memberof H
-     * @param {Function} p - predicate function
-     * @param {Array} xs - list
-     * @return {Boolean}
-     *
-     * @example
-     *
-     * any(x => x > 3, [1,2,3])
-     * // => false
-     */
-    H.any = function any(p, xs) {
-        return H.or(H.map(function (x) { return p(x); }, xs));
     };
 
     /**

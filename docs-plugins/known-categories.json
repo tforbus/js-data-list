@@ -1,9 +1,0 @@
-{
-    "Basic": { "displayName": "Basic" },
-    "Sublists": { "displayName": "Sublists" },
-    "Folds": { "displayName": "Folds" },
-    "Searching": { "displayName": "Searching" },
-    "Transformations": { "displayName": "Transformations" },
-    "Indexing": { "displayName": "Indexing" },
-    "Zips": { "displayName": "Zips" }
-}
