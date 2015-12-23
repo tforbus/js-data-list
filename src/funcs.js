@@ -969,6 +969,34 @@
     };
 
     /**
+     * Returns a list of successive reduced values from the right.
+     *
+     * @category Scans
+     * @public
+     * @mbmerof H
+     * @param {Function} f - function to build with
+     * @param {*} z - initial value
+     * @param {Array} xs - list
+     * @return {Array}
+     *
+     * @example
+     * 
+     * scanr(x y => x / y, 2, [100, 20, 10])
+     * // => [25, 4, 5, 2]
+     */
+    H.scanr = function scanr(f, z, xs) {
+        function _scanr(f, z, xs, acc) {
+            if (H.isEmpty(xs)) { return acc; }
+            var init = H.init(xs);
+            var last = H.last(xs);
+            var result = f(last, z);
+
+            return _scanr(f, result, init, utils.cons(result, acc));
+        }
+        return _scanr(f, z, xs, [z]);
+    };
+
+    /**
      * Returns a list of lists where the first element is the longest prefix of xs that 
      * satisfies p, and the second element of the list is the remainder of the list.
      * It is the equivalent of calling [takeWhile(p, xs), dropWhile(p, xs)].
