@@ -59,8 +59,8 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - cycle
 
 ## Todo
-- mapAccumL
-- mapAccumR
+- mapAccumL (useful?)
+- mapAccumR (useful?)
 - repeat (NOTE: hold off until Proxy object works?)
 - unfoldr
 - isPrefixOf
