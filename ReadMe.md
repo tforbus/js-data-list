@@ -54,12 +54,12 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - concatMap
 - scanl
 - scanr
+- iterate
 
 ## Todo
 - mapAccumL
 - mapAccumR
-- iterate
-- repeat
+- repeat (NOTE: hold off until Proxy object works?)
 - replicate
 - cycle
 - unfoldr

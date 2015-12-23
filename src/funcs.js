@@ -236,6 +236,47 @@
     };
 
     /**
+     * Transforms a finite list into a circular one.
+     *
+     * @category Infinite Lists
+     * @public
+     * @memberof H
+     * @param {Array} xs
+     * @return {Function)
+     * @throws Will throw an error if the list is empty.
+     *
+     * @example
+     *
+     * var infinite = cycle([1,2,3]);
+     * infinite.next().value // 1
+     * infinite.next().value // 2
+     * infinite.next().value // 3
+     * infinite.next().value // 1
+     */
+    H.cycle = function cycle(xs) {
+        if (H.isEmpty(xs)) {
+            throw {
+                name: 'Exception',
+                message: 'H.cycle: empty list'
+            };
+        }
+
+        var list = xs;
+        var len = H.length(xs);
+        var increment = H.iterate(function (x) {
+            return (x + 1) % len;
+        }, 0);
+
+        return {
+            next: function () {
+                return {
+                    value: H.nth(increment.next().value, xs)
+                };
+            }
+        };
+    };
+
+    /**
      * Returns the suffix of xs after the first n elements, or [] if n > length xs.
      * 
      * @category Sublists
@@ -408,31 +449,6 @@
     };
 
     /**
-     * Extract the first element of a list, which must be non-empty.
-     *
-     * @category Basic
-     * @public
-     * @memberof H
-     * @param {Array.<T>} xs - the list
-     * @return {T}
-     * @throws Will throw an error if the list is empty.
-     *
-     * @example
-     *
-     * head([1, 2, 3])
-     * // => 1
-     */
-    H.head = function head(xs) {
-        if (H.isEmpty(xs)) {
-            throw {
-                name: 'Exception',
-                message: 'H.head: empty list'
-            };
-        }
-        return xs[0];
-    };
-
-    /**
      * Takes a list and returns a list of lists such that the concatenation of the result
      * is equal to the argument. Moreover, each sublist in the result contains only equal 
      * elements.
@@ -473,6 +489,31 @@
         }
 
         return _group(xs, [], 0);
+    };
+
+    /**
+     * Extract the first element of a list, which must be non-empty.
+     *
+     * @category Basic
+     * @public
+     * @memberof H
+     * @param {Array.<T>} xs - the list
+     * @return {T}
+     * @throws Will throw an error if the list is empty.
+     *
+     * @example
+     *
+     * head([1, 2, 3])
+     * // => 1
+     */
+    H.head = function head(xs) {
+        if (H.isEmpty(xs)) {
+            throw {
+                name: 'Exception',
+                message: 'H.head: empty list'
+            };
+        }
+        return xs[0];
     };
 
     /**
@@ -623,6 +664,36 @@
      */
     H.isNotElem = function isNotElem(x, xs) {
         return !H.isElem(x, xs);
+    };
+
+    /**
+     * Returns an "infinite list" of repeated applications of a function f to x.
+     *
+     * @category Infinite Lists
+     * @public
+     * @memberof H
+     * @param {Function} f
+     * @param {*} x
+     * @return {Function}
+     *
+     * @example
+     *
+     * var increment = iterate(function (x) { return x + 1; }, 0);
+     * // => increment.next().value // 0
+     * // => increment.next().value // 1
+     */
+    H.iterate = function iterate(f, x) {
+        var current = x;
+
+        return {
+            next: function () {
+                var previous = current;
+                current = f(previous);
+                return {
+                    value: previous
+                };
+            }
+        };
     };
 
     /**
@@ -922,6 +993,43 @@
      */
     H.product = function product(xs) {
         return H.foldr(function (x, y) { return x * y; }, 1, xs);
+    };
+
+    /**
+     * Returns of a list of length `n`, with each element being x.
+     *
+     * @category Infinite Lists
+     * @public
+     * @memberof H
+     * @param {Integer} n
+     * @param {*} x
+     * @return {Array}
+     *
+     * @example
+     *
+     * replicate(3, 1)
+     * // => [1, 1, 1]
+     *
+     * @example
+     *
+     * replicate(3, {foo: 'bar'})
+     * // => [ {foo: 'bar'}, {foo: 'bar'}, {foo: 'bar'} ]
+     */
+    H.replicate = function replicate(n, x) {
+        if (n < 0) {
+            throw {
+                name: 'Exception',
+                message: 'H.replicate: n must be greater than 0'
+            };
+        }
+
+        function _replicate(n, x, acc) {
+            if (n === 0) { return acc; }
+            var elem = JSON.parse(JSON.stringify(x));
+            return _replicate(n - 1, x, utils.snoc(elem, acc));
+        }
+
+        return _replicate(n, x, []);
     };
 
     /**
