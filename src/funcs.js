@@ -785,7 +785,7 @@
                 message: 'H.maximum: empty list'
             };
         }
-        if (H.length(xs) === 1) { return xs[0]; }
+        if (H.length(xs) === 1) { return H.head(xs); }
 
         var unc = H.uncons(xs);
 
@@ -818,7 +818,7 @@
                 message: 'H.minimum: empty list'
             };
         }
-        if (H.length(xs) === 1) { return xs[0]; }
+        if (H.length(xs) === 1) { return H.head(xs); }
 
         var unc = H.uncons(xs);
 
