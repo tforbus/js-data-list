@@ -55,13 +55,13 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - scanl
 - scanr
 - iterate
+- replicate
+- cycle
 
 ## Todo
 - mapAccumL
 - mapAccumR
 - repeat (NOTE: hold off until Proxy object works?)
-- replicate
-- cycle
 - unfoldr
 - isPrefixOf
 - isSuffixOf
