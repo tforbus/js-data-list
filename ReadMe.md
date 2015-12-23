@@ -52,9 +52,9 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - sum
 - product
 - concatMap
+- scanl
 
 ## Todo
-- scanl
 - scanr
 - mapAccumL
 - mapAccumR
