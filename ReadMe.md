@@ -51,9 +51,9 @@ Eventually some functions may be able to handle infinite lists, but that is a st
 - all
 - sum
 - product
+- concatMap
 
 ## Todo
-- concatMap
 - scanl
 - scanr
 - mapAccumL

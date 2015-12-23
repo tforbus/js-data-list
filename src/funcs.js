@@ -74,7 +74,7 @@
          * @return {Array}
          */
         snoc: function (x, xs) {
-            var list = [].concat(xs);
+            var list = xs.slice();
             list.push(x);
             return list;
         }
@@ -214,6 +214,25 @@
         if (H.isEmpty(xss)) { return []; }
         var unc = H.uncons(xss);
         return H.append(unc.head, H.concat(unc.tail));
+    };
+
+    /**
+     * Map a function over all elements of a container and concatenate the resulting lists.
+     *
+     * @category Folds
+     * @public
+     * @memberof H
+     * @param {Function} f - function
+     * @param {Array.Array} xss - container
+     * @return {Array}
+     *
+     * @example
+     *
+     * concatMap(function (xs) { return filter(x > 3); }, [ [1,2,3], [4,5,6], [69] ])
+     * // => [4,5,6,69]
+     */
+    H.concatMap = function concatMap(f, xss) {
+        return H.concat(H.map(f, xss));
     };
 
     /**
@@ -877,10 +896,9 @@
         }
 
         function _insertInEachAll(x, xss) {
-            // TODO: concatmap
-            return H.concat(H.map(function (xs) {
+            return H.concatMap(function (xs) {
                 return _insertInEach(x, xs, 0, []);
-            }, xss));
+            }, xss);
         }
 
         var head = H.head(xs);
