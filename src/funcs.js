@@ -969,7 +969,7 @@
      *
      * @example
      *
-     * sum([2,3,4])
+     * product([2,3,4])
      * // => 24
      */
     H.product = function product(xs) {

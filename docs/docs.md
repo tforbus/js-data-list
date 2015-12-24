@@ -656,7 +656,7 @@ Returns the product of all elements in the list.
 **Examples**
 
 ```javascript
-sum([2,3,4])
+product([2,3,4])
 // => 24
 ```
 
