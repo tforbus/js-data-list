@@ -1135,7 +1135,7 @@
      * @memberof H
      * @param {Array} prefix - prefix list
      * @param {Array} xs - queried list
-     * @return {?Array}
+     * @return {Array?}
      *
      * @example
      *
