@@ -419,6 +419,24 @@ isEmpty([])
 
 Returns **Boolean** 
 
+## isInfixOf
+
+Determine if the first list is contained within the second.
+
+**Parameters**
+
+-   `xs` **Array** 
+-   `ys` **Array** 
+
+**Examples**
+
+```javascript
+isInfixOf([1,2], [4,3,2,1,0])
+// => true
+```
+
+Returns **Boolean** 
+
 ## isNotElem
 
 The negation of `isElem`.
@@ -433,6 +451,42 @@ The negation of `isElem`.
 ```javascript
 isElem(1, [1, 2, 3])
 // => false
+```
+
+Returns **Boolean** 
+
+## isPrefixOf
+
+Determine if the first list is a prefix of the second.
+
+**Parameters**
+
+-   `xs` **Array** 
+-   `ys` **Array** 
+
+**Examples**
+
+```javascript
+isPrefixOf([1,2], [1,2,3])
+// => true
+```
+
+Returns **Boolean** 
+
+## isSuffixOf
+
+Determine if the first list is a suffix of the second.
+
+**Parameters**
+
+-   `xs` **Array** 
+-   `ys` **Array** 
+
+**Examples**
+
+```javascript
+isSuffixOf([2,1], [4,3,2,1])
+// => true
 ```
 
 Returns **Boolean** 

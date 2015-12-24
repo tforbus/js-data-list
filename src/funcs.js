@@ -629,6 +629,28 @@
     };
 
     /**
+     * Determine if the first list is contained within the second.
+     *
+     * @category Predicates
+     * @public
+     * @memberof H
+     * @param {Array} xs
+     * @param {Array} ys
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * isInfixOf([1,2], [4,3,2,1,0])
+     * // => true
+     */
+    H.isInfixOf = function isInfixOf(xs, ys) {
+        if (H.length(xs) > H.length(ys)) { return false; }
+        if (H.isEmpty(xs)) { return true; }
+
+        return H.isPrefixOf(xs, ys) || H.isInfixOf(xs, H.tail(ys));
+    };
+
+    /**
      * The negation of `isElem`.
      *
      * @category Searching
@@ -645,6 +667,50 @@
      */
     H.isNotElem = function isNotElem(x, xs) {
         return !H.isElem(x, xs);
+    };
+
+    /**
+     * Determine if the first list is a prefix of the second.
+     *
+     * @category Predicates
+     * @public
+     * @memberof H
+     * @param {Array} xs
+     * @param {Array} ys
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * isPrefixOf([1,2], [1,2,3])
+     * // => true
+     */
+    H.isPrefixOf = function (xs, ys) {
+        if (H.length(xs) > H.length(ys)) { return false; }
+        if (H.isEmpty(xs)) { return true; }
+
+        return H.head(xs) === H.head(ys) && H.isPrefixOf(H.tail(xs), H.tail(ys));
+    };
+
+    /**
+     * Determine if the first list is a suffix of the second.
+     *
+     * @category Predicates
+     * @public
+     * @memberof H
+     * @param {Array} xs
+     * @param {Array} ys
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * isSuffixOf([2,1], [4,3,2,1])
+     * // => true
+     */
+    H.isSuffixOf = function (xs, ys) {
+        if (H.length(xs) > H.length(ys)) { return false; }
+        if (H.isEmpty(xs)) { return true; }
+
+        return H.last(xs) === H.last(ys) && H.isSuffixOf(H.init(xs), H.init(ys));
     };
 
     /**
